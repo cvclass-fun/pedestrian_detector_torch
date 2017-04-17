@@ -22,22 +22,22 @@ os.execute('mkdir -p ' .. opt.save_dir)
 
 -- Caltech
 print('Download caltech\'s algorithms result files for benchmark...')
-os.execute(('th download_extract_caltech_algorithms.lua -save_dir %s'):format(opt.save_dir))
+os.execute(('th download/download_extract_caltech_algorithms.lua -save_dir %s'):format(opt.save_dir))
 
 -- INRIA
 print('Download INRIA\'s algorithms result files for benchmark...')
-os.execute(('th download_extract_inria_algorithms.lua -save_dir %s'):format(opt.save_dir))
+os.execute(('th download/download_extract_inria_algorithms.lua -save_dir %s'):format(opt.save_dir))
 
 -- ETH
 print('Download ETH\'s algorithms result files for benchmark...')
-os.execute(('th download_extract_eth_algorithms.lua -save_dir %s'):format(opt.save_dir))
+os.execute(('th download/download_extract_eth_algorithms.lua -save_dir %s'):format(opt.save_dir))
 
 -- Tud-Brussels
 print('Download Tud-Brussels\'s algorithms result files for benchmark...')
-os.execute(('th download_extract_tudbrussels_algorithms.lua -save_dir %s'):format(opt.save_dir))
+os.execute(('th download/download_extract_tudbrussels_algorithms.lua -save_dir %s'):format(opt.save_dir))
 
 -- Daimler
 print('Download Daimler\'s algorithms result files for benchmark...')
-os.execute(('th download_extract_daimler_algorithms.lua -save_dir %s'):format(opt.save_dir))
+os.execute(('th download/download_extract_daimler_algorithms.lua -save_dir %s'):format(opt.save_dir))
 
 print('Script complete.')
