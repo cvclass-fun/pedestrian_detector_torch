@@ -1,0 +1,12 @@
+[submodule "roi_proposals/edges"]
+	path = roi_proposals/edges
+	url = https://github.com/pdollar/edges
+[submodule "roi_proposals/textprogressbar"]
+	path = roi_proposals/textprogressbar
+	url = https://github.com/megasthenis/textprogressbar
+[submodule "roi_proposals/toolbox"]
+	path = roi_proposals/toolbox
+	url = https://github.com/pdollar/toolbox
+[submodule "benchmark/eval_code/code3.2.1/export_fig"]
+	path = benchmark/eval_code/code3.2.1/export_fig
+	url = https://github.com/altmany/export_fig
