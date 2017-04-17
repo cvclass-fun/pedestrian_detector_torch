@@ -103,7 +103,7 @@ cmd:text('Torch-7 Fast-RCNN download pretrained models.')
 cmd:text()
 cmd:text(' ---------- General options ------------------------------------')
 cmd:text()
-cmd:option('-save_dir',   './data', 'Experiment ID')
+cmd:option('-save_dir',   'data/pretrained_models/', 'Experiment ID')
 cmd:text()
 
 local opt = cmd:parse(arg or {})
