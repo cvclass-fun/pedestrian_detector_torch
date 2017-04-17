@@ -70,8 +70,19 @@ cd APIs/lua && luarocks make
 
 ## Data setup
 
-### Download model results for benchmark
+### Download pre-trained models and benchmark algorithm results
 
+Several pre-trained models are available to be used in this code. To download all networks, simply run the following command in the terminal:
+
+```bash
+th download/download_pretrained_models.lua
+```
+
+Benchmark evaluation algorithms need to be downloaded from the [caltech website](http://www.vision.caltech.edu/Image_Datasets/CaltechPedestrians/) before proceeding to benchmark the trained network. To download all available algorithms simply do the following:
+
+```bash
+th download/download_extract_algorithms.lua
+```
 
 
 ### RoI Proposals
