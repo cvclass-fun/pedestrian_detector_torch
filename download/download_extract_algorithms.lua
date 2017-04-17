@@ -2,7 +2,9 @@
     Download and extract Caltech's pedestrian dataset algorithm files for evaluation/comparison.
 ]]
 
+
 require 'paths'
+
 
 local cmd = torch.CmdLine()
 cmd:text()
