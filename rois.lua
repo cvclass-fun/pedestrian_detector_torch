@@ -43,23 +43,23 @@ local function get_command(name, mode, data_dir, save_dir)
     if str == 'caltech' then
         dset_fn = 'script_process_rois_acf_caltech'
         if mode == 'train' then
-            dset_dirname = ('%s_skip=%d_thresh=%d_cal=%s'):format(name, 30, -1, 0.1)
+            dset_dirname = ('%s_skip=%d_thresh=%d_cal=%s'):format(name, 30, 1, 0.1)
         else
-            dset_dirname = ('%s_skip=%d_thresh=%d_cal=%s'):format(name, 30, -1, 0.025)
+            dset_dirname = ('%s_skip=%d_thresh=%d_cal=%s'):format(name, 30, 1, 0.025)
         end
     elseif str == 'caltech_10x' then
         dset_fn = 'script_process_rois_acf_caltech'
         if mode == 'train' then
-            dset_dirname = ('%s_skip=%d_thresh=%d_cal=%s'):format(name, 3, -1, 0.1)
+            dset_dirname = ('%s_skip=%d_thresh=%d_cal=%s'):format(name, 3, 1, 0.1)
         else
-            dset_dirname = ('%s_skip=%d_thresh=%d_cal=%s'):format(name, 3, -1, 0.025)
+            dset_dirname = ('%s_skip=%d_thresh=%d_cal=%s'):format(name, 3, 1, 0.025)
         end
     elseif str == 'caltech_30x' then
         dset_fn = 'script_process_rois_acf_caltech'
         if mode == 'train' then
-            dset_dirname = ('%s_skip=%d_thresh=%d_cal=%s'):format(name, 1, -1, 0.1)
+            dset_dirname = ('%s_skip=%d_thresh=%d_cal=%s'):format(name, 1, 1, 0.1)
         else
-            dset_dirname = ('%s_skip=%d_thresh=%d_cal=%s'):format(name, 1, -1, 0.025)
+            dset_dirname = ('%s_skip=%d_thresh=%d_cal=%s'):format(name, 1, 1, 0.025)
         end
     elseif str == 'daimler' then
         error('Daimler dataset not yet defined.')
@@ -80,7 +80,7 @@ local function get_command(name, mode, data_dir, save_dir)
                   '"try, %s(\'%s\', \'%s\'), catch, exit, end, exit"')
                   :format(dset_fn, data_dir, '.' .. save_dir)
 
-    return command, dset_dirname
+    return command, paths.concat(save_dir, dset_dirname)
 end
 
 ------------------------------------------------------------------------------------------------------------
@@ -94,7 +94,7 @@ local function process_rois(name, mode, save_dir)
     -- get command
     local command, dset_path = get_command(name, mode, data_dir, save_dir)
 
-    if not paths.dirp(paths.concat(save_dir, dset_path)) then
+    if not paths.dirp(dset_path) then
         print('\n***WARNING: This may take some minutes to process.***')
         os.execute(command)
     end
@@ -118,10 +118,10 @@ local function load_rois_files(dset_path, name, mode)
         rois[k] = {}
         for i=1, set.nfiles do -- cycle all files
             local image_filename = set.getFilename(i)
-            local tmp_str =  string.split(fname, '/')
-            local set_name = tmp_str[#tmp_str-2]
-            local video_name = tmp_str[#tmp_str-1]
-            local fname = string.split(tmp_str[#tmp_str],'.')[1]
+            local tmp_str =  string.split(image_filename, '/')
+            local set_name = tmp_str[#tmp_str-3]
+            local video_name = tmp_str[#tmp_str-2]
+            local fname = string.split(tmp_str[#tmp_str],'.jpg')[1]
 
             local rois_fname = paths.concat(dset_path, set_name, video_name, fname .. '.mat')
 
