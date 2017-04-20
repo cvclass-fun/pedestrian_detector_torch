@@ -33,12 +33,12 @@ local data_gen = data_loader(opt.dataset, 'train')
 
 
 --------------------------------------------------------------------------------
--- Load/Process regions-of-interest (RoIs)
+-- Load regions-of-interest (RoIs)
 --------------------------------------------------------------------------------
 
 print('==> (3/5) Load roi proposals data')
 local rois_loader = paths.dofile('rois.lua')
-local rois = rois_loader(opt.dataset, 'train')
+local rois = rois_loader(opt.dataset, opt.proposalAlg, 'train')
 
 
 --------------------------------------------------------------------------------
