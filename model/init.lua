@@ -7,30 +7,33 @@ require 'nn'
 require 'cudnn'
 require 'inn'
 inn.utils = require 'inn.utils'
-local utils = require 'fastrcnn.utils'
+--local utils = require 'fastrcnn.utils'
+local utils = paths.dofile('/home/mf/Toolkits/Codigo/git/fastrcnn/utils/init.lua')
 
 ------------------------------------------------------------------------------------------------------------
 
 local function setup_feature_network(name)
+    local model_loader
     local str = string.lower(name)
     if string.match(str, 'alexnet') then
         --model = require 'models.alexnet'
-        return paths.dofile('alexnet.lua')
+        model_loader = paths.dofile('alexnet.lua')
     elseif string.match(str, 'vgg') then
         --model = require 'models.vgg'
-        return paths.dofile('vgg.lua')
+        model_loader = paths.dofile('vgg.lua')
     elseif string.match(str, 'zeiler') then
         --model = require 'models.zeiler'
-        return paths.dofile('zeiler.lua')
+        model_loader = paths.dofile('zeiler.lua')
     elseif string.match(str, 'resnet') then
         --model = require 'models.resnet'
-        return paths.dofile('resnet.lua')
+        model_loader = paths.dofile('resnet.lua')
     elseif string.match(str, 'inception') then
         --model = require 'models.inceptionv3'
-        return paths.dofile('inceptionv3.lua')
+        model_loader = paths.dofile('inceptionv3.lua')
     else
         error('Undefined network type: ' .. name.. '. Available network types: alexnet, vgg, zeiler, resnet or inception.')
     end
+    return model_loader(name)
 end
 
 ------------------------------------------------------------------------------------------------------------
@@ -50,9 +53,10 @@ end
 
 ------------------------------------------------------------------------------------------------------------
 
-local function select_model(model_name, architecture_type, cls_size, nGPU, nClasses)
+local function select_model(model_name, architecture_type, net_configs, nGPU, nClasses)
     assert(model_name)
     assert(architecture_type)
+    assert(net_configs)
     assert(nGPU)
     assert(nClasses)
 
@@ -60,15 +64,12 @@ local function select_model(model_name, architecture_type, cls_size, nGPU, nClas
     local featureNet, model_params = setup_feature_network(model_name)
 
     -- load architecture fun
-    local archFn = architecture_loader(architecture_type)
+    local create_architecture_fn = architecture_loader(architecture_type)
 
-    -- setup classifier params
-    local cls_params = {
-        cls_size = cls_size
-    }
+    -- setup the full model
+    local model =  create_architecture_fn(featureNet, model_params, net_configs, nGPU, nClasses)
 
-    -- setup and return the model
-    return archFn(featureNet, model_params, cls_params, nGPU, nClasses)
+    return model, model_params
 end
 
 ------------------------------------------------------------------------------------------------------------

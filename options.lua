@@ -3,6 +3,8 @@
 ]]
 
 
+projectDir = projectDir or './'
+
 local options = {}
 
 function options.parse(arg)
@@ -15,11 +17,11 @@ function options.parse(arg)
     cmd:text(' ---------- General options ------------------------------------')
     cmd:text()
     cmd:option('-expID',       'alexnet', 'Experiment ID')
-    cmd:option('-expDir',   './data/exp', 'Experiments directory')
+    cmd:option('-expDir',   projectDir .. 'data/exp', 'Experiments directory')
     cmd:option('-dataset',     'caltech', 'Dataset to use for train/test/demo/benchmark. Options: caltech | caltech_10x | caltech_30x | inria')
     cmd:option('-manualSeed',          2, 'Manually set RNG seed')
     cmd:option('-GPU',                 1, 'Default preferred GPU, if set to -1: no GPU')
-    cmd:option('-nGPU',                1, 'Number of GPUs to use by default')
+    cmd:option('-nGPU',                2, 'Number of GPUs to use by default')
     cmd:option('-nThreads',            4, 'Number of data loading threads')
     cmd:option('-verbose',        "true", 'Output messages on screen.')
     cmd:option('-progressbar',    "false", 'Display batch messages using a progress bar if true, else display a more verbose text info.')
@@ -30,8 +32,7 @@ function options.parse(arg)
     cmd:option('-netType',     'alexnet', 'Feature network. Options: alexnet | vgg16 | vgg19 | resnet-18 | resnet-34 | resnet-50 | ' ..
                                                    'resnet-101 | resnet-152 | resnet-200 | zeiler | googlenetv3.')
     cmd:option('-clsType',      'simple', 'Classifier network. Options: simple (original frcnn) | concat | parallel.')
-    cmd:option('-netLayer',        '{{0,6,1/6}}', 'Convolutional layers from the network')
-    cmd:option('-clsSize',          4096, 'Size of the fully-connected networks in the classifier.')
+    cmd:option('-netConfigs',   '{{6,4096,6}}', 'Network configurations ({roi_pool_size, fc_size, conv_layer_number}).')
     cmd:option('-loadModel',          '', 'Provide the path of a previously trained model')
     cmd:option('-continue',      "false", 'Pick up where an experiment left off')
     cmd:text()
@@ -46,12 +47,13 @@ function options.parse(arg)
     cmd:text()
     cmd:text(' ---------- Training options -----------------------------------')
     cmd:text()
-    cmd:option('-trainIters',      1000, 'Number of train iterations per epoch')
+    cmd:option('-offsetRoi',        10, 'Roi proposals max offset. It is used to increase the number of region proposals.')
+    cmd:option('-trainIters',     1000, 'Number of train iterations per epoch')
     cmd:option('-epochStart',        1, 'Manual epoch number (useful on restarts)')
     cmd:option('-schedule', "{{30,1e-3,5e-4},{10,1e-4,5e-4}}", 'Optimization schedule. Overrides the previous configs if not empty.')
-    cmd:option('-snapshot',          10, 'How often to take a snapshot of the model (0 = never)')
-    cmd:option('-optimize',       "true", 'Optimize network memory usage using optnet.')
-    cmd:option('-testInter',      "true", 'If true, does intermediate testing of the model. Else it only tests the network at the end of the train.')
+    cmd:option('-snapshot',         10, 'How often to take a snapshot of the model (0 = never)')
+    cmd:option('-optimize',      "true", 'Optimize network memory usage using optnet.')
+    cmd:option('-testInter',     "true", 'If true, does intermediate testing of the model. Else it only tests the network at the end of the train.')
     cmd:text()
     cmd:text()
     cmd:text(' ===============================================================')
@@ -81,7 +83,8 @@ function options.parse(arg)
     cmd:text()
     cmd:text(' ---------- FRCNN data augment options --------------------------------------')
     cmd:text()
-    cmd:option('-frcnn_hflip',         0.5, 'Probability to flip the image horizontally [0,1].')
+    cmd:option('-frcnn_hflip',              0.5, 'Probability to flip the image horizontally [0,1].')
+    cmd:option('-frcnn_roi_augment_offset', 0.3, 'Increase the number of region proposals used for train between a range of coordinates defined by this value [0,1].')
     cmd:text()
 
     -- parse options
@@ -107,7 +110,7 @@ function options.parse(arg)
     end
     ---------------------------------------------------------------------------------------------------
     local function Str2TableFn(input) -- convert a string into a table
-        local json = require 'rapidjson'
+        local json = require 'json'
         -- replace '{' and '}' by '[' and '], respectively
         input = input:gsub("%{","[")
         input = input:gsub("%}","]")
@@ -130,6 +133,7 @@ function options.parse(arg)
 
     -- convert string to table
     opt.schedule = Str2TableFn(opt.schedule)
+    opt.netConfigs = Str2TableFn(opt.netConfigs)
 
     return opt
 end

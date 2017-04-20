@@ -9,10 +9,8 @@ local utils = require 'fastrcnn.utils'
 
 ------------------------------------------------------------------------------------------------------------
 
-local function CreateModel(nGPU, nClasses, netType)
+local function CreateModel(netType)
 
-    assert(nGPU)
-    assert(nClasses)
     assert(netType)
 
 
@@ -36,12 +34,12 @@ local function CreateModel(nGPU, nClasses, netType)
     -- load features + model parameters (mean/std,stride/num feats (last conv)/colorspace format)
     local features
     if netType == 'vgg16' or netType == 'vgg' then
-        local net = torch.load('./data/pretrained_models/model_vgg16.t7'))
-        local model_parameters = torch.load('./data/pretrained_models/parameters_vgg16.t7'))
+        local net = torch.load(projectDir .. '/data/pretrained_models/model_vgg16.t7'))
+        local model_parameters = torch.load(projectDir .. '/data/pretrained_models/parameters_vgg16.t7'))
         features = SelectFeatsDisableBackprop(net)
     elseif netType == 'vgg19' then
-        local net = torch.load('./data/pretrained_models/model_vgg19.t7'))
-        local model_parameters = torch.load('./data/pretrained_models/parameters_vgg19.t7'))
+        local net = torch.load(projectDir .. '/data/pretrained_models/model_vgg19.t7'))
+        local model_parameters = torch.load(projectDir .. '/data/pretrained_models/parameters_vgg19.t7'))
         features = SelectFeatsDisableBackprop(net)
     else
         error('Undefined network type: '.. netType..'. Available networks: vgg16, vgg19.')

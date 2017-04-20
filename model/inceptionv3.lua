@@ -11,14 +11,11 @@ local utils = require 'fastrcnn.utils'
 
 ------------------------------------------------------------------------------------------------------------
 
-local function CreateModel(nGPU, nClasses)
-
-    assert(nGPU)
-    assert(nClasses)
+local function CreateModel()
 
     -- load features + model parameters (mean/std,stride/num feats (last conv)/colorspace format)
-    local net = torch.load('./data/pretrained_models/model_googlenet_inceptionv3_cunn.t7'):cuda()
-    local model_parameters = torch.load('./data/pretrained_models/parameters_googlenet_inceptionv3_cunn.t7'))
+    local net = torch.load(projectDir .. '/data/pretrained_models/model_googlenet_inceptionv3_cunn.t7'):cuda()
+    local model_parameters = torch.load(projectDir .. '/data/pretrained_models/parameters_googlenet_inceptionv3_cunn.t7'))
 
     local input = torch.randn(1,3,299,299):cuda()
     local output1 = net:forward(input):clone()

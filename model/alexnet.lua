@@ -11,13 +11,10 @@ require 'inn'
 local utils = paths.dofile('/home/mf/Toolkits/Codigo/git/fastrcnn/utils/init.lua')
 
 
-local function CreateModel(nGPU, nClasses)
+local function CreateModel()
 
-    assert(nGPU)
-    assert(nClasses)
-
-    local net = torch.load('./data/pretrained_models/model_alexnet.t7')
-    local model_parameters = torch.load('./data/pretrained_models/parameters_alexnet.t7')
+    local net = torch.load(projectDir .. '/data/pretrained_models/model_alexnet.t7')
+    local model_parameters = torch.load(projectDir .. 'data/pretrained_models/parameters_alexnet.t7')
     local features = net
 
     -- remove all unnecessary layers
