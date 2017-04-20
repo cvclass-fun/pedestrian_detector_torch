@@ -25,7 +25,12 @@ end
 
 ------------------------------------------------------------------------------------------------------------
 
-local function setup_model(featuresNet, model_parameters, cls_params, nGPU, classes)
+local function setup_model(featuresNet, model_parameters, cls_params, nGPU, nClasses)
+
+    local roi_size = cls_params[1][1]
+    local cls_size = cls_params[1][2]
+    local pixel_stride = model_parameters.stride
+    local nfeats = model_parameters.num_feats
 
     -- create model
     local model = nn.Sequential()
@@ -38,7 +43,9 @@ local function setup_model(featuresNet, model_parameters, cls_params, nGPU, clas
         :add(setup_classifier_network(nfeats, roi_size, cls_size))
         :add(utils.model.CreateClassifierBBoxRegressor(cls_size, nClasses))
 
-    return model, model_parameters
+    model:cuda()
+
+    return model
 end
 
 ------------------------------------------------------------------------------------------------------------
