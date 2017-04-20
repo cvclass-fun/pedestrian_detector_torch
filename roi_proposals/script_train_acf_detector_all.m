@@ -1,6 +1,5 @@
-function [detector] = script_train_acf_detector_all( )
+function script_train_acf_detector_all( )
 % Trains the ACF detector for all datasets
-%
 
 %% Train caltech detector
 script_train_acf_detector_Caltech()

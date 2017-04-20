@@ -13,4 +13,3 @@ addpath(genpath([root_path '/roi_proposals']));
 addpath(genpath([root_path '/benchmark']));
 
 end
-
