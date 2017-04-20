@@ -59,18 +59,27 @@ local function fetch_data_set(name, set_name)
             local objID = dbloader:object(set_name, id + 1):squeeze()
             local bbox = dbloader:get(set_name, 'boxes', objID[3]):squeeze()
             local label = objID[2]
-            table.insert(gt_boxes, bbox:totable())
-            table.insert(gt_classes, label)
+            if label == 1 or label == 2 then -- (0 - 'person' | 1 - 'person-fa'')
+                table.insert(gt_boxes, bbox:totable())
+                table.insert(gt_classes, 1)
+            end
         end
+
+        if #gt_boxes == 0 then
+            return nil
+        end
+
         gt_boxes = torch.FloatTensor(gt_boxes)
-        return gt_boxes,gt_classes
+        return gt_boxes, gt_classes
     end
 
     -- number of samples
-    loader.nfiles = dbloader:size(set_name, 'image_filenames')[1]
+    local nfiles = dbloader:size(set_name, 'image_filenames')[1]
+    loader.nfiles = nfiles
 
     -- classes
-    loader.classLabel = ascii2str(dbloader:get(set_name, 'classes'))
+    local class_names = ascii2str(dbloader:get(set_name, 'classes', 1))
+    loader.classLabel = class_names -- fetch the first two classes
 
     return loader
 end
