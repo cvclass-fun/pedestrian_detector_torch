@@ -41,7 +41,7 @@ function options.parse(arg)
     cmd:option('-netType',     'alexnet', 'Feature network. Options: alexnet | vgg16 | vgg19 | resnet-18 | resnet-34 | resnet-50 | ' ..
                                                    'resnet-101 | resnet-152 | resnet-200 | zeiler | googlenetv3.')
     cmd:option('-clsType',      'simple', 'Classifier network. Options: simple (original frcnn) | concat | parallel.')
-    cmd:option('-netConfigs',   '{{6,4096,6}}', 'Network configurations ({roi_pool_size, fc_size, conv_layer_number}).')
+    cmd:option('-netConfigs',   '{{6,4096,cudnn.ReLU,6}}', 'Network configurations ({roi_pool_size, fc_size, layer_type, layer_number}).')
     cmd:option('-loadModel',          '', 'Provide the path of a previously trained model')
     cmd:option('-continue',      "false", 'Pick up where an experiment left off')
     cmd:text()
