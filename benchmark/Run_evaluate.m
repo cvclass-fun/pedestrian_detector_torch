@@ -2,7 +2,7 @@ function Run_evaluate(experimentIDini, experimentIDend, algPlotNum, dataNamesID,
 %% Evaluation script
 %
 % To evaluate the method, just setup the correct paths and run the script.
-% Don't forget to add all the folders and subfolders to the env path. 
+% Don't forget to add all the folders and subfolders to the env path.
 %
 % Options:
 %   experimentID - Experiment id. The different experiments are designated
@@ -24,7 +24,7 @@ function Run_evaluate(experimentIDini, experimentIDend, algPlotNum, dataNamesID,
 %                     [15] 'Overlap=75',    [50 inf],  [.65 inf], 0,   .75, 1.25
 %                     [16] 'Expand=100',    [50 inf],  [.65 inf], 0,   .5,  1.00
 %                     [17] 'Expand=125',    [50 inf],  [.65 inf], 0,   .5,  1.25
-%                     [18] 'Expand=150',    [50 inf],  [.65 inf], 0,   .5,  1.50 
+%                     [18] 'Expand=150',    [50 inf],  [.65 inf], 0,   .5,  1.50
 %   algPlotNum - Total number of algorithms to be plotted.
 %   dataNamesID - Select a dataset for testing by its id. The available
 %                 datasets are:
@@ -40,19 +40,19 @@ function Run_evaluate(experimentIDini, experimentIDend, algPlotNum, dataNamesID,
 %                   subfolder 'algorithms'.
 %   savePlotDir - Folder path to store plot results.
 %
-%   algorithmsNames - String containing the names of algorithms to plot. 
-%                     The names of one or several algortihms can be passed 
-%                     by separating each algorithm name by a comma ','.  
+%   algorithmsNames - String containing the names of algorithms to plot.
+%                     The names of one or several algortihms can be passed
+%                     by separating each algorithm name by a comma ','.
 %                     Examples:
 %                               1 algorithm: 'Ours'
 %                               3 algorithms: 'ACF,LDCF,CCF'
-%     
-%   flag_benchmark - Defines the plot output. 
-%                    If > 0, plots all each algorithm in their own graph. 
-%                    If == 0 then plots all agorithms plus the inputed ones into a single graph. 
-%                    If < 0 then plots onylt the introduced algorithms
+%
+%   flag_benchmark - Defines the plot output.
+%                    If > 0, plots all each algorithm in their own graph.
+%                    If == 0 then plots all agorithms plus the inputed ones into a single graph.
+%                    If < 0 then plots only the introduced algorithms
 %                    names.
-% 
+%
 
 %% Add eval code paths
 addpath(genpath('./'))

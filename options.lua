@@ -28,6 +28,14 @@ function options.parse(arg)
     cmd:option('-progressbar',    "false", 'Display batch messages using a progress bar if true, else display a more verbose text info.')
     cmd:option('-printConfusion', "false", 'Print confusion matrix into the screen.')
     cmd:text()
+    cmd:text(' ---------- Benchmark options --------------------------------------')
+    cmd:text()
+    cmd:option('-eval_ini',               1, 'Process experiments initial range. (Default=1).')
+    cmd:option('-eval_end',              18, 'Process experiments ending range. (Default=18).')
+    cmd:option('-eval_num_plots',        15, 'Number of algorithms to display on the plot.')
+    cmd:option('-eval_plot_name',    'ours', 'Plot the model with a specfied name.')
+    cmd:option('-eval_force',        "true", 'Force computing all detections. If true, process detections even if they already exist. Otherwise, skip processing.')
+    cmd:text()
     cmd:text(' ---------- Model options --------------------------------------')
     cmd:text()
     cmd:option('-netType',     'alexnet', 'Feature network. Options: alexnet | vgg16 | vgg19 | resnet-18 | resnet-34 | resnet-50 | ' ..
@@ -48,7 +56,6 @@ function options.parse(arg)
     cmd:text()
     cmd:text(' ---------- Training options -----------------------------------')
     cmd:text()
-    cmd:option('-offsetRoi',        10, 'Roi proposals max offset. It is used to increase the number of region proposals.')
     cmd:option('-trainIters',     1000, 'Number of train iterations per epoch')
     cmd:option('-epochStart',        1, 'Manual epoch number (useful on restarts)')
     cmd:option('-schedule', "{{30,1e-3,5e-4},{10,1e-4,5e-4}}", 'Optimization schedule. Overrides the previous configs if not empty.')
@@ -69,17 +76,19 @@ function options.parse(arg)
     cmd:option('-frcnn_rois_per_img',    128, 'mini-batch size (1 = pure stochastic)')
     cmd:option('-frcnn_fg_fraction',    0.25, 'Fraction of minibatch that is foreground labeled (class > 0).')
     cmd:option('-frcnn_bg_fraction',    1.00, 'Fraction of background samples that has overlap with objects (overlap >= bg_thresh_lo).')
-    cmd:option('-frcnn_fg_thresh',       0.5, 'Overlap threshold for a ROI to be considered foreground (if >= fg_thresh).')
-    cmd:option('-frcnn_bg_thresh_hi',    0.5, 'Overlap threshold for a ROI to be considered background (class = 0 if overlap in [frcnn_bg_thresh_lo, frcnn_bg_thresh_hi))')
-    cmd:option('-frcnn_bg_thresh_lo',    0.1, 'Overlap threshold for a ROI to be considered background (class = 0 if overlap in [frcnn_bg_thresh_lo, frcnn_bg_thresh_hi)).')
+    cmd:option('-frcnn_fg_thresh',       0.5, 'Overlap threshold for a ROI to be considered foreground ' ..
+                                              '(if >= fg_thresh).')
+    cmd:option('-frcnn_bg_thresh_hi',    0.5, 'Overlap threshold for a ROI to be considered background ' ..
+                                              '(class = 0 if overlap in [frcnn_bg_thresh_lo, frcnn_bg_thresh_hi))')
+    cmd:option('-frcnn_bg_thresh_lo',    0.1, 'Overlap threshold for a ROI to be considered background ' ..
+                                              '(class = 0 if overlap in [frcnn_bg_thresh_lo, frcnn_bg_thresh_hi)).')
     cmd:option('-frcnn_bbox_thresh',     0.5, 'Valid training sample (IoU > bbox_thresh) for bounding box regresion.')
     cmd:text()
     cmd:text(' ---------- FRCNN Test options --------------------------------------')
     cmd:text()
     cmd:option('-frcnn_test_scales',      600, 'Image scales -- the short edge of input image.')
     cmd:option('-frcnn_test_max_size',   1000, 'Max pixel size of a scaled input image.')
-    cmd:option('-frcnn_test_nms_thresh',  0.3, 'Non-Maximum suppression threshold.')
-    cmd:option('-frcnn_test_bbox_voting_nms_thresh',  0.5, 'Bbox voting Non-Maximum suppression threshold.')
+    cmd:option('-frcnn_test_nms_thresh',  0.5, 'Non-Maximum suppression threshold.')
     cmd:option('-frcnn_test_mode',      "voc", 'mAP testing format voc, coco')
     cmd:text()
     cmd:text(' ---------- FRCNN data augment options --------------------------------------')
@@ -87,6 +96,7 @@ function options.parse(arg)
     cmd:option('-frcnn_hflip',              0.5, 'Probability to flip the image horizontally [0,1].')
     cmd:option('-frcnn_roi_augment_offset', 0.3, 'Increase the number of region proposals used for train between a range of coordinates defined by this value [0,1].')
     cmd:text()
+
 
     -- parse options
     local opt = cmd:parse(arg or {})
@@ -122,15 +132,14 @@ function options.parse(arg)
 
     opt.expDir = paths.concat(opt.expDir, opt.dataset or 'defaultdb')
     opt.savedir = paths.concat(opt.expDir, opt.expID)
-    opt.load = (opt.loadModel and opt.loadModel ~= '') or 'model_final.t7'
+    opt.load = (opt.loadModel and opt.loadModel ~= '') or paths.concat(opt.savedir, 'model_final.t7')
 
     -- check if some booleans were inserted as strings. If so, convert the string to boolean type
     opt.continue = ConvertString2Boolean(opt.continue)
     opt.verbose = ConvertString2Boolean(opt.verbose)
-
-    -- check if some booleans were inserted as strings. If so, convert the string to boolean type
     opt.progressbar = ConvertString2Boolean(opt.progressbar)
     opt.printConfusion = ConvertString2Boolean(opt.printConfusion)
+    opt.eval_force = ConvertString2Boolean(opt.eval_force)
 
     -- convert string to table
     opt.schedule = Str2TableFn(opt.schedule)
