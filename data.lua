@@ -14,8 +14,6 @@ local function get_db_loader(name)
         dbloader = dbc.load{name='caltech_pedestrian', task='detection_10x'}
     elseif str == 'caltech_30x' then
         dbloader = dbc.load{name='caltech_pedestrian', task='detection_30x'}
-    elseif str == 'daimler' then
-        error('Daimler dataset not yet defined.')
     elseif str == 'eth' then
         error('eth dataset not yet defined.')
     elseif str == 'inria' then
@@ -23,7 +21,7 @@ local function get_db_loader(name)
     elseif str == 'tudbrussels' then
         error('tudbrussels dataset not yet defined.')
     else
-        error(('Undefined dataset: %s. Available options: caltech, daimler, eth, inria or tudbrussels'):format(name))
+        error(('Undefined dataset: %s. Available options: caltech, eth, inria or tudbrussels'):format(name))
     end
     return dbloader
 end
@@ -59,7 +57,7 @@ local function fetch_data_set(name, set_name)
             local objID = dbloader:object(set_name, id + 1):squeeze()
             local bbox = dbloader:get(set_name, 'boxes', objID[3]):squeeze()
             local label = objID[2]
-            if label == 1 or label == 2 then -- (0 - 'person' | 1 - 'person-fa'')
+            if label == 1 or label == 2 then -- (1 - 'person' | 2 - 'person-fa'')
                 table.insert(gt_boxes, bbox:totable())
                 table.insert(gt_classes, 1)
             end
