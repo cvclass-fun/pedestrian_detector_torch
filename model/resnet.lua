@@ -4,10 +4,12 @@
 
 
 require 'nn'
+require 'cunn'
 require 'cudnn'
 require 'inn'
 inn.utils = require 'inn.utils'
-local utils = require 'fastrcnn.utils'
+--local utils = require 'fastrcnn.utils'
+local utils = paths.dofile('/home/mf/Toolkits/Codigo/git/fastrcnn/utils/init.lua')
 
 ------------------------------------------------------------------------------------------------------------
 
@@ -28,8 +30,8 @@ local function CreateModel(netType)
     assert(info, 'Undefined network: '..netType..'. Available networks: resnet18, resnet32, resnet50, resnet101, resnet152, resnet200.')
 
     -- load features + model parameters (mean/std,stride/num feats (last conv)/colorspace format)
-    local net = torch.load(projectDir .. '/data/pretrained_models/model_'..info[2]..'.t7'))
-    local model_parameters = torch.load(projectDir .. '/data/pretrained_models/parameters_'..info[2]..'.t7'))
+    local net = torch.load(projectDir .. '/data/pretrained_models/model_'..info[2]..'.t7')
+    local model_parameters = torch.load(projectDir .. '/data/pretrained_models/parameters_'..info[2]..'.t7')
     net:cuda():evaluate()
     local features = net
     features:remove(features:size())

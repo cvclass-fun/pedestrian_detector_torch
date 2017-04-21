@@ -3,16 +3,17 @@
 ]]
 
 require 'nn'
+require 'cunn'
 require 'cudnn'
 require 'inn'
-local utils = require 'fastrcnn.utils'
+--local utils = require 'fastrcnn.utils'
+local utils = paths.dofile('/home/mf/Toolkits/Codigo/git/fastrcnn/utils/init.lua')
 
 ------------------------------------------------------------------------------------------------------------
 
 local function CreateModel(netType)
 
     assert(netType)
-
 
     local function SelectFeatsDisableBackprop(net)
         local features = net
@@ -34,12 +35,12 @@ local function CreateModel(netType)
     -- load features + model parameters (mean/std,stride/num feats (last conv)/colorspace format)
     local features
     if netType == 'vgg16' or netType == 'vgg' then
-        local net = torch.load(projectDir .. '/data/pretrained_models/model_vgg16.t7'))
-        local model_parameters = torch.load(projectDir .. '/data/pretrained_models/parameters_vgg16.t7'))
+        local net = torch.load(projectDir .. '/data/pretrained_models/model_vgg16.t7')
+        local model_parameters = torch.load(projectDir .. '/data/pretrained_models/parameters_vgg16.t7')
         features = SelectFeatsDisableBackprop(net)
     elseif netType == 'vgg19' then
-        local net = torch.load(projectDir .. '/data/pretrained_models/model_vgg19.t7'))
-        local model_parameters = torch.load(projectDir .. '/data/pretrained_models/parameters_vgg19.t7'))
+        local net = torch.load(projectDir .. '/data/pretrained_models/model_vgg19.t7')
+        local model_parameters = torch.load(projectDir .. '/data/pretrained_models/parameters_vgg19.t7')
         features = SelectFeatsDisableBackprop(net)
     else
         error('Undefined network type: '.. netType..'. Available networks: vgg16, vgg19.')
