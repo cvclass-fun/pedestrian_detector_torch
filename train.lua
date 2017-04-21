@@ -11,6 +11,7 @@ local fastrcnn = paths.dofile('/home/mf/Toolkits/Codigo/git/fastrcnn/init.lua')
 torch.setdefaulttensortype('torch.FloatTensor')
 paths.dofile('projectdir.lua')
 
+
 --------------------------------------------------------------------------------
 -- Load options
 --------------------------------------------------------------------------------
@@ -23,9 +24,6 @@ local opt = opts.parse(arg)
 --------------------------------------------------------------------------------
 -- Load dataset data loader
 --------------------------------------------------------------------------------
--- The fastrcnn.train() function receives a table with loading functions to fetch
--- the necessary data from a data structure. This way it is easy to use other
--- datasets with the fastrcnn package.
 
 print('==> (2/5) Load dataset data loader')
 local data_loader = paths.dofile('data.lua')
@@ -51,8 +49,8 @@ if opt.loadModel == '' then
     local load_model = paths.dofile('model/init.lua')
     model, model_parameters = load_model(opt.netType, opt.clsType, opt.netConfigs, opt.nGPU, 1)
 else
-    print('==> (4/5) Load model from file: ')
-    local model_data = torch.load(opt.loadModel)
+    print('==> (4/5) Load model from file: ' .. opt.load)
+    local model_data = torch.load(opt.load)
     model, model_parameters = model_data.model, model_data.params
 end
 
