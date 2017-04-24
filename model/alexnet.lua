@@ -37,10 +37,12 @@ local function features_basic(roi_pool_size, cls_size)
 
     -- classifier parameters (needed to config the classifier network with the correct parameters)
     local classifier_params = {
-        nfeats = model_parameters.num_feats
-        roi_size = roi_pool_size
-        cls_size = cls_size
-        stride = model_parameters.stride
+        {
+            nfeats = model_parameters.num_feats
+            roi_size = roi_pool_size
+            cls_size = cls_size
+            stride = model_parameters.stride
+        }
     }
 
     return featuresNet, model_parameters, classifier_params

@@ -27,10 +27,10 @@ end
 
 local function classifier_simple(cls_params, nClasses)
 --[[Simple vanilla Fast R-CNN classifier.]]
-    local nfeats = cls_params.nfeats
-    local roi_size = cls_params.roi_size
-    local cls_size = cls_params.cls_size
-    local pixel_stride = cls_params.stride
+    local nfeats = cls_params[1].nfeats
+    local roi_size = cls_params[1].roi_size
+    local cls_size = cls_params[1].cls_size
+    local pixel_stride = cls_params[1].stride
 
     local classifier = nn.Sequential()
         :add(inn.ROIPooling(roi_size, roi_size, 1/pixel_stride))
