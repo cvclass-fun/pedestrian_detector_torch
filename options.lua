@@ -77,7 +77,7 @@ function options.parse(arg)
     cmd:option('-frcnn_imgs_per_batch',    2, 'Images per batch.')
     cmd:option('-frcnn_rois_per_img',    128, 'mini-batch size (1 = pure stochastic)')
     cmd:option('-frcnn_fg_fraction',    0.25, 'Fraction of minibatch that is foreground labeled (class > 0).')
-    cmd:option('-frcnn_bg_fraction',    1.00, 'Fraction of background samples that has overlap with objects (overlap >= bg_thresh_lo).')
+    cmd:option('-frcnn_bg_fraction',    0.75, 'Fraction of background samples that has overlap with objects (bg_thresh_hi >= overlap >= bg_thresh_lo).')
     cmd:option('-frcnn_fg_thresh',       0.5, 'Overlap threshold for a ROI to be considered foreground ' ..
                                               '(if >= fg_thresh).')
     cmd:option('-frcnn_bg_thresh_hi',    0.5, 'Overlap threshold for a ROI to be considered background ' ..
