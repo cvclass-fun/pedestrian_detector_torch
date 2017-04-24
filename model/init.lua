@@ -6,7 +6,6 @@
 require 'nn'
 require 'cudnn'
 require 'inn'
-inn.utils = require 'inn.utils'
 --local utils = require 'fastrcnn.utils'
 local utils = paths.dofile('/home/mf/Toolkits/Codigo/git/fastrcnn/utils/init.lua')
 
@@ -69,7 +68,7 @@ local function select_model(model_name, architecture_type, features_id, roi_pool
         )
         :add(classifierNet)
 
-    return model, model_params
+    return model:cuda(), model_params
 end
 
 ------------------------------------------------------------------------------------------------------------

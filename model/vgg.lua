@@ -49,4 +49,289 @@ local function CreateModel(netType)
     return features, model_parameters
 end
 
-return CreateModel
+------------------------------------------------------------------------------------------------------------
+
+local function features_basic(name, roi_pool_size, cls_size)
+    local featuresNet, model_parameters = CreateModel(name)
+
+    -- classifier parameters (needed to config the classifier network with the correct parameters)
+    local classifier_params = {
+        {
+            nfeats = model_parameters.num_feats,
+            roi_size = roi_pool_size,
+            cls_size = cls_size,
+            stride = model_parameters.stride
+        }
+    }
+
+    return featuresNet, model_parameters, classifier_params
+end
+
+------------------------------------------------------------------------------------------------------------
+
+local function features_setup_2(name, roi_pool_size, cls_size)
+    local featuresNet, model_parameters = CreateModel(name)
+
+    local features_net1 = nn.Sequential()
+    for i = 1, 19 do
+        features_net1:add(features:get(i))
+    end
+    local features_net2 = nn.Sequential()
+    for i = 20, 21 do
+        features_net2:add(features:get(i))
+    end
+
+    local features_join = nn.Sequential()
+        :add(features_net1)
+        :add(nn.ConcatTable():add(nn.Identity()):add(features_net2))
+
+    -- classifier parameters (needed to config the classifier network with the correct parameters)
+    local classifier_params = {
+        {
+            nfeats = 512,
+            roi_size = roi_pool_size,
+            cls_size = cls_size,
+            stride = model_parameters.stride
+        },
+        {
+            nfeats = model_parameters.num_feats,
+            roi_size = roi_pool_size,
+            cls_size = cls_size,
+            stride = model_parameters.stride
+        },
+    }
+
+    return features_join, model_parameters, classifier_params
+end
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+local function features_setup_3(name, roi_pool_size, cls_size)
+    local featuresNet, model_parameters = CreateModel(name)
+
+    local features_net1 = nn.Sequential()
+    for i = 1, 17 do
+        features_net1:add(features:get(i))
+    end
+    local features_net2 = nn.Sequential()
+    for i = 18, 21 do
+        features_net2:add(features:get(i))
+    end
+
+    local features_join = nn.Sequential()
+        :add(features_net1)
+        :add(nn.ConcatTable():add(nn.Identity()):add(features_net2))
+
+    -- classifier parameters (needed to config the classifier network with the correct parameters)
+    local classifier_params = {
+        {
+            nfeats = 512,
+            roi_size = roi_pool_size,
+            cls_size = cls_size,
+            stride = model_parameters.stride
+        },
+        {
+            nfeats = model_parameters.num_feats,
+            roi_size = roi_pool_size,
+            cls_size = cls_size,
+            stride = model_parameters.stride
+        },
+    }
+
+    return features_join, model_parameters, classifier_params
+end
+
+------------------------------------------------------------------------------------------------------------
+
+local function features_setup_4(name, roi_pool_size, cls_size)
+    local featuresNet, model_parameters = CreateModel(name)
+
+    local features_net1 = nn.Sequential()
+    for i = 1, 14 do
+        features_net1:add(features:get(i))
+    end
+    local features_net2 = nn.Sequential()
+    for i = 15, 21 do
+        features_net2:add(features:get(i))
+    end
+
+    local features_join = nn.Sequential()
+        :add(features_net1)
+        :add(nn.ConcatTable():add(nn.Identity()):add(features_net2))
+
+    -- classifier parameters (needed to config the classifier network with the correct parameters)
+    local classifier_params = {
+        {
+            nfeats = 512,
+            roi_size = roi_pool_size,
+            cls_size = cls_size,
+            stride = model_parameters.stride
+        },
+        {
+            nfeats = model_parameters.num_feats,
+            roi_size = roi_pool_size,
+            cls_size = cls_size,
+            stride = model_parameters.stride
+        },
+    }
+
+    return features_join, model_parameters, classifier_params
+end
+
+------------------------------------------------------------------------------------------------------------
+
+local function features_setup_5(name, roi_pool_size, cls_size)
+    local featuresNet, model_parameters = CreateModel(name)
+
+    local features_net1 = nn.Sequential()
+    for i = 1, 12 do
+        features_net1:add(features:get(i))
+    end
+    local features_net2 = nn.Sequential()
+    for i = 13, 21 do
+        features_net2:add(features:get(i))
+    end
+
+    local features_join = nn.Sequential()
+        :add(features_net1)
+        :add(nn.ConcatTable():add(nn.Identity()):add(features_net2))
+
+    -- classifier parameters (needed to config the classifier network with the correct parameters)
+    local classifier_params = {
+        {
+            nfeats = 512,
+            roi_size = roi_pool_size,
+            cls_size = cls_size,
+            stride = model_parameters.stride
+        },
+        {
+            nfeats = model_parameters.num_feats,
+            roi_size = roi_pool_size,
+            cls_size = cls_size,
+            stride = model_parameters.stride
+        },
+    }
+
+    return features_join, model_parameters, classifier_params
+end
+
+------------------------------------------------------------------------------------------------------------
+
+local function features_setup_6(name, roi_pool_size, cls_size)
+    local featuresNet, model_parameters = CreateModel(name)
+
+    local features_net1 = nn.Sequential()
+    for i = 1, 10 do
+        features_net1:add(features:get(i))
+    end
+    local features_net2 = nn.Sequential()
+    for i = 11, 21 do
+        features_net2:add(features:get(i))
+    end
+
+    local features_join = nn.Sequential()
+        :add(features_net1)
+        :add(nn.ConcatTable():add(nn.Identity()):add(features_net2))
+
+    -- classifier parameters (needed to config the classifier network with the correct parameters)
+    local classifier_params = {
+        {
+            nfeats = 512,
+            roi_size = roi_pool_size,
+            cls_size = cls_size,
+            stride = model_parameters.stride
+        },
+        {
+            nfeats = model_parameters.num_feats,
+            roi_size = roi_pool_size,
+            cls_size = cls_size,
+            stride = model_parameters.stride
+        },
+    }
+
+    return features_join, model_parameters, classifier_params
+end
+
+------------------------------------------------------------------------------------------------------------
+
+local function features_setup_7(name, roi_pool_size, cls_size)
+    local featuresNet, model_parameters = CreateModel(name)
+
+    local features_net1 = nn.Sequential()
+    for i = 1, 14 do
+        features_net1:add(features:get(i))
+    end
+    local features_net2 = nn.Sequential()
+    for i = 15, 19 do
+        features_net2:add(features:get(i))
+    end
+    local features_net3 = nn.Sequential()
+    for i = 20, 21 do
+        features_net3:add(features:get(i))
+    end
+
+    local features_join = nn.Sequential()
+        :add(features_net1)
+        :add(nn.ConcatTable()
+            :add(nn.Identity())
+            :add(nn.Sequential()
+                :add(features_net2)
+                :add(nn.ConcatTable()
+                    :add(nn.Identity())
+                    :add(features_net3))))
+
+    -- classifier parameters (needed to config the classifier network with the correct parameters)
+    local classifier_params = {
+        {
+            nfeats = 512,
+            roi_size = roi_pool_size,
+            cls_size = cls_size,
+            stride = model_parameters.stride
+        },
+        {
+            nfeats = 512,
+            roi_size = roi_pool_size,
+            cls_size = cls_size,
+            stride = model_parameters.stride
+        },
+        {
+            nfeats = model_parameters.num_feats,
+            roi_size = roi_pool_size,
+            cls_size = cls_size,
+            stride = model_parameters.stride
+        },
+    }
+
+    return features_join, model_parameters, classifier_params
+end
+
+------------------------------------------------------------------------------------------------------------
+
+local function select_model(name, features_id, roi_pool_size, cls_size)
+    assert(name)
+    assert(features_id)
+    assert(roi_pool_size)
+    assert(cls_size)
+
+    if features_id == 1 then
+        return features_basic(name, roi_pool_size, cls_size)
+    elseif features_id == 2 then
+        return features_setup_2(name, roi_pool_size, cls_size)
+    elseif features_id == 3 then
+        return features_setup_3(name, roi_pool_size, cls_size)
+    elseif features_id == 4 then
+        return features_setup_4(name, roi_pool_size, cls_size)
+    elseif features_id == 5 then
+        return features_setup_5(name, roi_pool_size, cls_size)
+    elseif features_id == 6 then
+        return features_setup_6(name, roi_pool_size, cls_size)
+    elseif features_id == 7 then
+        return features_setup_7(name, roi_pool_size, cls_size)
+    else
+        error(('Invalid featuresID: %d. Valid ids: 1, 2, 3, 4, 5, 6 or 7'):format())
+    end
+end
+
+------------------------------------------------------------------------------------------------------------
+
+return select_model

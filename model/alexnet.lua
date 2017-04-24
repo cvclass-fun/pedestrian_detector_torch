@@ -69,15 +69,15 @@ local function features_setup_2(roi_pool_size, cls_size)
     -- classifier parameters (needed to config the classifier network with the correct parameters)
     local classifier_params = {
         {
-            nfeats = 384
-            roi_size = roi_pool_size
-            cls_size = cls_size
+            nfeats = 384,
+            roi_size = roi_pool_size,
+            cls_size = cls_size,
             stride = model_parameters.stride
         },
         {
-            nfeats = model_parameters.num_feats
-            roi_size = roi_pool_size
-            cls_size = cls_size
+            nfeats = model_parameters.num_feats,
+            roi_size = roi_pool_size,
+            cls_size = cls_size,
             stride = model_parameters.stride
         },
     }
@@ -106,15 +106,15 @@ local function features_setup_3(roi_pool_size, cls_size)
     -- classifier parameters (needed to config the classifier network with the correct parameters)
     local classifier_params = {
         {
-            nfeats = 384
-            roi_size = roi_pool_size
-            cls_size = cls_size
+            nfeats = 384,
+            roi_size = roi_pool_size,
+            cls_size = cls_size,
             stride = model_parameters.stride
         },
         {
-            nfeats = model_parameters.num_feats
-            roi_size = roi_pool_size
-            cls_size = cls_size
+            nfeats = model_parameters.num_feats,
+            roi_size = roi_pool_size,
+            cls_size = cls_size,
             stride = model_parameters.stride
         },
     }
@@ -153,21 +153,21 @@ local function features_setup_4(roi_pool_size, cls_size)
     -- classifier parameters (needed to config the classifier network with the correct parameters)
     local classifier_params = {
         {
-            nfeats = 384
-            roi_size = roi_pool_size
-            cls_size = cls_size
+            nfeats = 384,
+            roi_size = roi_pool_size,
+            cls_size = cls_size,
             stride = model_parameters.stride
         },
         {
-            nfeats = 384
-            roi_size = roi_pool_size
-            cls_size = cls_size
+            nfeats = 384,
+            roi_size = roi_pool_size,
+            cls_size = cls_size,
             stride = model_parameters.stride
         },
         {
-            nfeats = model_parameters.num_feats
-            roi_size = roi_pool_size
-            cls_size = cls_size
+            nfeats = model_parameters.num_feats,
+            roi_size = roi_pool_size,
+            cls_size = cls_size,
             stride = model_parameters.stride
         },
     }

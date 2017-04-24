@@ -47,7 +47,7 @@ local model, model_parameters
 if opt.loadModel == '' then
     print('==> (4/5) Setup model:')
     local load_model = paths.dofile('model/init.lua')
-    model, model_parameters = load_model(opt.netType, opt.clsType, opt.netConfigs, opt.nGPU, 1)
+    model, model_parameters = load_model(opt.netType, opt.clsType, opt.featID, opt.roi_size, opt.cls_size, opt.nGPU, 1)
 else
     print('==> (4/5) Load model from file: ' .. opt.load)
     local model_data = torch.load(opt.load)
