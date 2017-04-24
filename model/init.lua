@@ -12,7 +12,7 @@ local utils = paths.dofile('/home/mf/Toolkits/Codigo/git/fastrcnn/utils/init.lua
 
 ------------------------------------------------------------------------------------------------------------
 
-local function setup_feature_network(name)
+local function setup_feature_network(name, features_id, roi_pool_size, cls_size)
     local model_loader
     local str = string.lower(name)
     if string.match(str, 'alexnet') then
@@ -33,27 +33,22 @@ local function setup_feature_network(name)
     else
         error('Undefined network type: ' .. name.. '. Available network types: alexnet, vgg, zeiler, resnet or inception.')
     end
-    return model_loader(name)
+    return model_loader(name, features_id, roi_pool_size, cls_size)
 end
 
 ------------------------------------------------------------------------------------------------------------
 
-local function architecture_loader(name)
+local function setup_classifier_network(name)
+    local select_classifier = paths.dofile('classifier')
+    local model_loader
     local str = string.lower(name)
-    if str == 'simple' then
-        return paths.dofile('architecture_simple.lua')
-    elseif str == 'concat' then
-        return paths.dofile('architecture_concat.lua')
-    elseif str == 'parallel' then
-        return paths.dofile('architecture_parallel.lua')
-    else
-        error('Undefined architecture type: ' .. name.. '. Available architecture types: simple, concat or parallel.')
-    end
+    local classifier_loader = select_classifier(str)
+    return classifier_loader(classifier_params, nClasses)
 end
 
 ------------------------------------------------------------------------------------------------------------
 
-local function select_model(model_name, architecture_type, net_configs, nGPU, nClasses)
+local function select_model(model_name, architecture_type, features_id, roi_pool_size, cls_size, nGPU, nClasses)
     assert(model_name)
     assert(architecture_type)
     assert(net_configs)
@@ -61,13 +56,18 @@ local function select_model(model_name, architecture_type, net_configs, nGPU, nC
     assert(nClasses)
 
     -- setup feature network
-    local featureNet, model_params = setup_feature_network(model_name)
+    local featureNet, model_params, classifier_params = setup_feature_network(model_name, features_id, roi_pool_size, cls_size)
 
-    -- load architecture fun
-    local create_architecture_fn = architecture_loader(architecture_type)
+    -- setup classifier network
+    local classifierNet = setup_classifier_network(architecture_type, classifier_params, nClasses + 1)
 
-    -- setup the full model
-    local model =  create_architecture_fn(featureNet, model_params, net_configs, nGPU, nClasses)
+    -- combine feature + classifier networks
+    local model = nn.Sequential()
+        :add(nn.ParallelTable()
+            :add(utils.model.makeDataParallel(featuresNet, nGPU))
+            :add(nn.Identity())
+        )
+        :add(classifierNet)
 
     return model, model_params
 end
