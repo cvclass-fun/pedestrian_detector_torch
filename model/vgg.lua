@@ -33,14 +33,14 @@ local function CreateModel(netType)
 
 
     -- load features + model parameters (mean/std,stride/num feats (last conv)/colorspace format)
-    local features
+    local features, model_parameters
     if netType == 'vgg16' or netType == 'vgg' then
         local net = torch.load(projectDir .. '/data/pretrained_models/model_vgg16.t7')
-        local model_parameters = torch.load(projectDir .. '/data/pretrained_models/parameters_vgg16.t7')
+        model_parameters = torch.load(projectDir .. '/data/pretrained_models/parameters_vgg16.t7')
         features = SelectFeatsDisableBackprop(net)
     elseif netType == 'vgg19' then
         local net = torch.load(projectDir .. '/data/pretrained_models/model_vgg19.t7')
-        local model_parameters = torch.load(projectDir .. '/data/pretrained_models/parameters_vgg19.t7')
+        model_parameters = torch.load(projectDir .. '/data/pretrained_models/parameters_vgg19.t7')
         features = SelectFeatsDisableBackprop(net)
     else
         error('Undefined network type: '.. netType..'. Available networks: vgg16, vgg19.')
@@ -313,6 +313,7 @@ local function select_model(name, features_id, roi_pool_size, cls_size)
     assert(roi_pool_size)
     assert(cls_size)
 
+    local roi_pool_size = (roi_pool_size and roi_pool_size>0) or 7
     if features_id == 1 then
         return features_basic(name, roi_pool_size, cls_size)
     elseif features_id == 2 then
