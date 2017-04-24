@@ -14,7 +14,7 @@ local function load_rois(name, alg_name, mode)
     local proposals_fname = ('%s/%s_%s_%s.t7'):format(save_dir, name, alg_name, mode)
 
     -- check if the cache proposals .t7 file exists
-    if not paths.filep(proposals_fname) then
+    if paths.filep(proposals_fname) then
         return torch.load(proposals_fname)
     else
         error('file not found: ' .. proposals_fname )
