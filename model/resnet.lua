@@ -47,4 +47,40 @@ local function CreateModel(netType)
     return features, model_parameters
 end
 
-return CreateModel
+------------------------------------------------------------------------------------------------------------
+
+local function features_basic(name, roi_pool_size, cls_size)
+    local featuresNet, model_parameters = CreateModel(name)
+
+    -- classifier parameters (needed to config the classifier network with the correct parameters)
+    local classifier_params = {
+        {
+            nfeats = model_parameters.num_feats,
+            roi_size = roi_pool_size,
+            cls_size = cls_size,
+            stride = model_parameters.stride
+        }
+    }
+
+    return featuresNet, model_parameters, classifier_params
+end
+
+------------------------------------------------------------------------------------------------------------
+
+local function select_model(name, features_id, roi_pool_size, cls_size)
+    assert(name)
+    assert(features_id)
+    assert(roi_pool_size)
+    assert(cls_size)
+
+    local roi_pool_size = (roi_pool_size and roi_pool_size>0) or 6
+    if features_id == 1 then
+        return features_basic(name, roi_pool_size, cls_size)
+    else
+        error(('Invalid featuresID: %d. Valid ids: 1.'):format())
+    end
+end
+
+------------------------------------------------------------------------------------------------------------
+
+return select_model
