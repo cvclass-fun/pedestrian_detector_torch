@@ -70,7 +70,7 @@ end
 ------------------------------------------------------------------------------------------------------------
 
 local function features_setup_2(name, roi_pool_size, cls_size)
-    local featuresNet, model_parameters = CreateModel(name)
+    local features, model_parameters = CreateModel(name)
 
     local features_net1 = nn.Sequential()
     for i = 1, 19 do
@@ -104,10 +104,10 @@ local function features_setup_2(name, roi_pool_size, cls_size)
     return features_join, model_parameters, classifier_params
 end
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------
 
 local function features_setup_3(name, roi_pool_size, cls_size)
-    local featuresNet, model_parameters = CreateModel(name)
+    local features, model_parameters = CreateModel(name)
 
     local features_net1 = nn.Sequential()
     for i = 1, 17 do
@@ -144,7 +144,7 @@ end
 ------------------------------------------------------------------------------------------------------------
 
 local function features_setup_4(name, roi_pool_size, cls_size)
-    local featuresNet, model_parameters = CreateModel(name)
+    local features, model_parameters = CreateModel(name)
 
     local features_net1 = nn.Sequential()
     for i = 1, 14 do
@@ -181,7 +181,7 @@ end
 ------------------------------------------------------------------------------------------------------------
 
 local function features_setup_5(name, roi_pool_size, cls_size)
-    local featuresNet, model_parameters = CreateModel(name)
+    local features, model_parameters = CreateModel(name)
 
     local features_net1 = nn.Sequential()
     for i = 1, 12 do
@@ -218,7 +218,7 @@ end
 ------------------------------------------------------------------------------------------------------------
 
 local function features_setup_6(name, roi_pool_size, cls_size)
-    local featuresNet, model_parameters = CreateModel(name)
+    local features, model_parameters = CreateModel(name)
 
     local features_net1 = nn.Sequential()
     for i = 1, 10 do
@@ -255,7 +255,7 @@ end
 ------------------------------------------------------------------------------------------------------------
 
 local function features_setup_7(name, roi_pool_size, cls_size)
-    local featuresNet, model_parameters = CreateModel(name)
+    local features, model_parameters = CreateModel(name)
 
     local features_net1 = nn.Sequential()
     for i = 1, 14 do

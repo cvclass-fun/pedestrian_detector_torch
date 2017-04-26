@@ -37,8 +37,8 @@ end
 
 ------------------------------------------------------------------------------------------------------------
 
-local function setup_classifier_network(name)
-    local select_classifier = paths.dofile('classifier')
+local function setup_classifier_network(name, classifier_params, nClasses)
+    local select_classifier = paths.dofile('classifier.lua')
     local model_loader
     local str = string.lower(name)
     local classifier_loader = select_classifier(str)
@@ -50,7 +50,9 @@ end
 local function select_model(model_name, architecture_type, features_id, roi_pool_size, cls_size, nGPU, nClasses)
     assert(model_name)
     assert(architecture_type)
-    assert(net_configs)
+    assert(features_id)
+    assert(roi_pool_size)
+    assert(cls_size)
     assert(nGPU)
     assert(nClasses)
 
@@ -58,12 +60,12 @@ local function select_model(model_name, architecture_type, features_id, roi_pool
     local featureNet, model_params, classifier_params = setup_feature_network(model_name, features_id, roi_pool_size, cls_size)
 
     -- setup classifier network
-    local classifierNet = setup_classifier_network(architecture_type, classifier_params, nClasses + 1)
+    local classifierNet = setup_classifier_network(architecture_type, classifier_params, nClasses)
 
     -- combine feature + classifier networks
     local model = nn.Sequential()
         :add(nn.ParallelTable()
-            :add(utils.model.makeDataParallel(featuresNet, nGPU))
+            :add(utils.model.makeDataParallel(featureNet, nGPU))
             :add(nn.Identity())
         )
         :add(classifierNet)
