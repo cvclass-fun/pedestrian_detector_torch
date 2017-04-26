@@ -28,7 +28,7 @@ local opt = opts.parse(arg)
 --------------------------------------------------------------------------------
 
 print('==> (2/7) Load model: ' .. opt.load)
-local model, model_parameters = unpack(torch.load(opt.load)
+local model, model_parameters = unpack(torch.load(opt.load))
 
 
 --------------------------------------------------------------------------------
@@ -54,7 +54,7 @@ local imdetector = fastrcnn.ImageDetector(model, model_parameters, opt) -- singl
 
 print('==> (5/7) Load test image + proposals boxes')
 local data_loader = paths.dofile('data.lua')
-local loader = data_loader('test')()
+local loader = data_loader(opt.dataset, 'test')()
 
 local randIdx = torch.random(1, loader.test.nfiles)
 local im = image.load(loader.test.getFilename(randIdx), 3, 'float')
