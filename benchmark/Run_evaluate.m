@@ -58,11 +58,11 @@ function Run_evaluate(experimentIDini, experimentIDend, algPlotNum, dataNamesID,
 addpath(genpath('./'))
 
 %% Set all filenames to upper case (FastCF files begin with lower case so it needs to be fixed)
-% uppercaseFilenamesAlgs(algorithmsDir)
+uppercaseFilenamesAlgs(algorithmsDir)
 
 %% Evaluate/compare method
 for experimentID=experimentIDini:1:experimentIDend
-    fprintf('\nStart Experiment nº%d:\n', experimentID);
+    fprintf('\nStart Experiment nº%d (%d/%d):\n', experimentID, experimentID-experimentIDini+1, size(experimentIDini:1:experimentIDend ,2));
     dbEval(experimentID, algPlotNum, dataNamesID, datasetDir, algorithmsDir, savePlotDir, algorithmsNames, flag_benchmark)
     fprintf('\nEvaluation procedure complete.\n');
 end
