@@ -44,7 +44,7 @@ local rois = rois_loader(opt.dataset, opt.proposalAlg, 'test')
 --------------------------------------------------------------------------------
 
 print('==> (4/5) Load model: ' .. opt.load)
-local model, model_parameters = unpack(torch.load(opt.load)
+local model, model_parameters = unpack(torch.load(opt.load))
 
 
 --------------------------------------------------------------------------------
