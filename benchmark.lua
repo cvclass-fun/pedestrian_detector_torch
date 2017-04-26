@@ -28,6 +28,7 @@ local opt = opts.parse(arg)
 print('==> (2/6) Load dataset data loader')
 local data_loader = paths.dofile('data.lua')
 local data_gen = data_loader(opt.dataset, 'test')
+local data, data_dir = data_gen()
 
 
 --------------------------------------------------------------------------------
@@ -44,7 +45,7 @@ local rois = rois_loader(opt.dataset, opt.proposalAlg, 'test')
 --------------------------------------------------------------------------------
 
 print('==> (4/6) Load model: ' .. opt.load)
-local model, model_parameters = unpack(torch.load(opt.load)
+local model, model_parameters = unpack(torch.load(opt.load))
 
 
 --------------------------------------------------------------------------------
@@ -61,6 +62,6 @@ local imdetector = fastrcnn.ImageDetector(model, model_parameters, opt) -- singl
 
 print('==> (6/6) Benchmark algorithm')
 local utils = paths.dofile('utils.lua')
-utils.benchmark(data_gen(), rois, imdetector, opt)
+utils.benchmark(data, rois, imdetector, data_dir, opt)
 
 print('Script complete.')

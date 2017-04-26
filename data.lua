@@ -28,6 +28,13 @@ end
 
 ------------------------------------------------------------------------------------------------------------
 
+local function get_data_dir(name)
+    local dbloader = get_db_loader(name)
+    return dbloader.data_dir
+end
+
+------------------------------------------------------------------------------------------------------------
+
 local function fetch_data_set(name, set_name)
 
     local string_ascii = require 'dbcollection.utils.string_ascii'
@@ -85,18 +92,20 @@ end
 ------------------------------------------------------------------------------------------------------------
 
 local function loader_train(name)
-    return {
+    local loader =  {
         train = fetch_data_set(name, 'train'),
         test = fetch_data_set(name, 'test')
     }
+    return loader, get_data_dir(name)
 end
 
 ------------------------------------------------------------------------------------------------------------
 
 local function loader_test(name)
-    return {
+    local loader =  {
         test = fetch_data_set(name, 'test')
     }
+    return loader, get_data_dir(name)
 end
 
 ------------------------------------------------------------------------------------------------------------
