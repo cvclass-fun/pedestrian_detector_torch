@@ -45,18 +45,24 @@ end
 
 local function classifier_concat(cls_params, nClasses)
 --[[Concatenate multiple layers outputs of a network Basic Fast R-CNN architecture.]]
-    local prl = nn.ParallelTable()
+    if #cls_params == 1 then
+        return classifier_simple(cls_params, nClasses)
+    end
+
+    local concat = nn.ConcatTable()
     local nfeats = 0
     for i=1, #cls_params do
         nfeats = nfeats + cls_params[i].nfeats
-        prl:add(inn.ROIPooling(params.roi_size, params.roi_size, 1/params.pixel_stride))
+        concat:add(nn.Sequential()
+            :add(nn.ConcatTable()
+                :add(nn.Sequential():add(nn.SelectTable(1)):add(nn.SelectTable(i)))
+                :add(nn.SelectTable(2)))
+            :add(inn.ROIPooling(cls_params[i].roi_size, cls_params[i].roi_size, 1/cls_params[i].stride)))
     end
 
-    local join = nn.JoinTable(2)
-
     local classifier = nn.Sequential()
-        :add(prl)
-        :add(join)
+        :add(concat)
+        :add(nn.JoinTable(2))
         :add(nn.View(-1):setNumInputDims(3))
         :add(basic_classifier_network(nfeats, cls_params[1].roi_size, cls_params[1].cls_size))
         :add(utils.model.CreateClassifierBBoxRegressor(cls_params[1].cls_size, nClasses))
@@ -67,31 +73,44 @@ end
 ------------------------------------------------------------------------------------------------------------
 
 local function classifier_parallel(cls_params, nClasses)
---[[Create multiple parallel classifiers from multiple layers outputs of a pre-trained network and combine all outputs into a single one.]]
-    local prl = nn.ParallelTable()
-    local select_cls = nn.Sequential()
-    local select_reg = nn.Sequential()
-    for i=1, #cls_params do
-        prl:add(classifier_simple(cls_params[i], nClasses))
-        select_cls:add(nn.Sequential():add(nn.SelectTable(i):add(nn.SelectTable(1))))
-        select_reg:add(nn.Sequential():add(nn.SelectTable(i):add(nn.SelectTable(2))))
+--[[Create multiple parallel classifiers from multiple layers outputs of a pre-trained
+network and combine all outputs into a single one.]]
+    if #cls_params == 1 then
+        return classifier_simple(cls_params, nClasses)
     end
+
+    local concat = nn.ConcatTable()
+    local select_cls = nn.ConcatTable()
+    local select_reg = nn.ConcatTable()
+    for i=1, #cls_params do
+        concat:add(nn.Sequential()
+            :add(nn.ConcatTable()
+                :add(nn.Sequential():add(nn.SelectTable(1)):add(nn.SelectTable(i)))
+                :add(nn.SelectTable(2)))
+            :add(classifier_simple({cls_params[i]}, nClasses)))
+        select_cls:add(nn.Sequential():add(nn.SelectTable(i)):add(nn.SelectTable(1)))
+        select_reg:add(nn.Sequential():add(nn.SelectTable(i)):add(nn.SelectTable(2)))
+    end
+
+    local nclass = nClasses + 1
 
     local final_cls = nn.Sequential()
         :add(select_cls)
         :add(nn.JoinTable(2))
-        :add(nn.View(-1):setNumInputDims(3))
-        :add(nn.Linear(nClasses*#cls_params), nClasses)
+        :add(nn.View(-1):setNumInputDims(1))
+        :add(nn.Linear(nclass*#cls_params, nclass))
 
     local final_reg = nn.Sequential()
         :add(select_reg)
         :add(nn.JoinTable(2))
-        :add(nn.View(-1):setNumInputDims(3))
-        :add(nn.Linear(#cls_params*nClasses*4), nClasses*4)
+        :add(nn.View(-1):setNumInputDims(1))
+        :add(nn.Linear(#cls_params*nclass*4, nclass*4))
 
     local classifier = nn.Sequential()
-        :add(prl)
-        :add(nn.ConcatTable():add(final_cls):add(final_reg))
+        :add(concat)
+        :add(nn.ConcatTable()
+            :add(final_cls)
+            :add(final_reg))
 
     return classifier
 end
