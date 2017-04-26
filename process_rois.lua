@@ -13,13 +13,36 @@
 
 require 'paths'
 require 'torch'
-
---local loadRoiDataFn = fastrcnn.utils.load.matlab.single_file
-local load_files = paths.dofile('/home/mf/Toolkits/Codigo/git/fastrcnn/utils/load.lua')
-local loadRoiDataFn = load_files.matlab.single_file
+require 'xlua'
+local matio = require 'matio'
 
 torch.setdefaulttensortype('torch.FloatTensor')
 paths.dofile('projectdir.lua')
+
+------------------------------------------------------------------------------------------------------------
+
+local function get_data_dir(name)
+    local dbc = require 'dbcollection.manager'
+
+    local dbloader
+    local str = string.lower(name)
+    if str == 'caltech' then
+        dbloader = dbc.load{name='caltech_pedestrian', task='detection'}
+    elseif str == 'caltech_10x' then
+        dbloader = dbc.load{name='caltech_pedestrian', task='detection_10x'}
+    elseif str == 'caltech_30x' then
+        dbloader = dbc.load{name='caltech_pedestrian', task='detection_30x'}
+    elseif str == 'eth' then
+        error('eth dataset not yet defined.')
+    elseif str == 'inria' then
+        error('inria dataset not yet defined.')
+    elseif str == 'tudbrussels' then
+        error('tudbrussels dataset not yet defined.')
+    else
+        error(('Undefined dataset: %s. Available options: caltech, eth, inria or tudbrussels'):format(name))
+    end
+    return dbloader.data_dir
+end
 
 ------------------------------------------------------------------------------------------------------------
 
@@ -62,23 +85,23 @@ local function get_command(name, data_dir, save_dir, alg_name)
 
 
     local dset_dirname
-    str = string.lower(name)
+    str = string.lower(alg_name)
     if str == 'acf' then
         dset_dirname = {
-            "train" = paths.concat(save_dir, ('%s_acf_skip=%d_thresh=%d_cal=%s'):format(name, alg_opts['train']['skip_step'],
+            train = paths.concat(save_dir, ('%s_acf_skip=%d_thresh=%d_cal=%s'):format(name, alg_opts['train']['skip_step'],
                         alg_opts['train']['threshold'], alg_opts['train']['calibration'])),
-            "test" = paths.concat(save_dir, ('%s_acf_skip=%d_thresh=%d_cal=%s'):format(name, alg_opts['test']['skip_step'],
+            test = paths.concat(save_dir, ('%s_acf_skip=%d_thresh=%d_cal=%s'):format(name, alg_opts['test']['skip_step'],
                         alg_opts['test']['threshold'], alg_opts['test']['calibration']))
         }
     elseif alg_name == 'ldcf' then
         dset_dirname = {
-            "train" = paths.concat(save_dir, ('%s_ldcf_skip=%d'):format(name, alg_opts['train']['skip_step'])),
-            "test" = paths.concat(save_dir, ('%s_ldcf_skip=%d'):format(name, alg_opts['test']['skip_step']))
+            train = paths.concat(save_dir, ('%s_ldcf_skip=%d'):format(name, alg_opts['train']['skip_step'])),
+            test = paths.concat(save_dir, ('%s_ldcf_skip=%d'):format(name, alg_opts['test']['skip_step']))
         }
     elseif alg_name == 'edgeboxes' then
         dset_dirname = {
-            "train" = paths.concat(save_dir, ('%s_edgeboxes_skip=%d'):format(name, alg_opts['train']['skip_step'])),
-            "test" = paths.concat(save_dir, ('%s_edgeboxes_skip=%d'):format(name, alg_opts['test']['skip_step']))
+            train = paths.concat(save_dir, ('%s_edgeboxes_skip=%d'):format(name, alg_opts['train']['skip_step'])),
+            test = paths.concat(save_dir, ('%s_edgeboxes_skip=%d'):format(name, alg_opts['test']['skip_step']))
         }
     else
         error(('Invalid algorithm: %s. Available algorithms: acf, ldcf or edgeboxes'):format(alg_name))
@@ -94,14 +117,14 @@ end
 
 ------------------------------------------------------------------------------------------------------------
 
-local function process_rois(name, save_dir)
+local function process_rois(name, alg_name, save_dir)
     assert(name)
 
     -- get data directory
     local data_dir = get_data_dir(name)
 
     -- get command
-    local command, dset_path = get_command(name, data_dir, save_dir)
+    local command, dset_path = get_command(name, data_dir, save_dir, alg_name)
 
     if not paths.dirp(dset_path['train']) then
         print('\n***WARNING: This may take some minutes to process.***')
@@ -123,9 +146,13 @@ local function load_rois_files(dset_path, name, mode)
     local data_gen = data_loader(name, mode)
     local loader = data_gen()
 
+    print('Loading roi proposals: ' .. mode .. ' mode.')
+
     for k, set in pairs(loader) do
         rois[k] = {}
-        for i=1, set.nfiles do -- cycle all files
+        local nfiles = set.nfiles
+        for i=1, nfiles do -- cycle all files
+            xlua.progress(i, nfiles)
             local image_filename = set.getFilename(i)
             local tmp_str =  string.split(image_filename, '/')
             local set_name = tmp_str[#tmp_str-3]
@@ -134,7 +161,9 @@ local function load_rois_files(dset_path, name, mode)
 
             local rois_fname = paths.concat(dset_path, set_name, video_name, fname .. '.mat')
 
-            local boxes = loadRoiDataFn(rois_fname)
+            local bb = matio.load(rois_fname)
+            local boxes = bb["boxes"]:float()
+
             table.insert(rois[k], boxes)
         end
     end
