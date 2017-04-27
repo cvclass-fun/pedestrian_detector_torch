@@ -11,10 +11,10 @@ The following datasets are available for train/test:
 
 ### Requirements
 
-- NVIDIA GPU with compute capability 3.5+ (2GB+ ram)
 - [Torch7](http://torch.ch/docs/getting-started.html)
 - [Fast R-CNN module](https://github.com/farrajota/fast-rcnn-torch)
 - [dbcollection](https://github.com/farrajota/dbcollection)
+- Matlab >= 2012a (for benchmark and roi proposal generation)
 
 ### Packages/dependencies installation
 
@@ -25,7 +25,7 @@ To use this example code, some packages are required for it to work: `fastrcnn` 
 
 To install the Fast R-CNN package do the following:
 
-- step 1: install all the necessary dependencies.
+- install all the necessary dependencies.
 
 ```bash
 luarocks install tds
@@ -35,7 +35,7 @@ luarocks install matio
 luarocks install torchnet
 ```
 
-- setp 2: download and install the package.
+- download and install the package.
 
 ```bash
 git clone https://github.com/farrajota/fast-rcnn-torch
@@ -49,17 +49,17 @@ cd fast-rcnn-torch && luarocks make rocks/*
 
 To install the dbcollection package do the following:
 
-- step 1: download the git repository to disk.
+- download the git repository to disk.
 ```
 git clone https://github.com/farrajota/dbcollection
 ```
 
-- step 2: install the Python module.
+- install the Python module.
 ```
 cd dbcollection/ && python setup.py install
 ```
 
-- step 3: install the Lua package.
+-  install the Lua package.
 ```
 cd APIs/lua && luarocks make
 ```
@@ -78,7 +78,7 @@ Several pre-trained models are available to be used in this code. To download al
 th download/download_pretrained_models.lua
 ```
 
-Benchmark evaluation algorithms need to be downloaded from the [caltech website](http://www.vision.caltech.edu/Image_Datasets/CaltechPedestrians/) before proceeding to benchmark the trained network. To download all available algorithms simply do the following:
+For benchmark, other evaluation algorithms need to be downloaded before proceeding to evaluate the trained network. To download all available algorithms simply do the following:
 
 ```bash
 th download/download_extract_algorithms.lua
@@ -87,7 +87,13 @@ th download/download_extract_algorithms.lua
 
 ### RoI Proposals
 
+To generate region proposals, run `th generate_rois.lua` on the terminal. This will automatically generate the RoI proposals needed for training and testing the pedestrian detector.
 
+> Warning: processing the region proposals takes around a week to process. For this reason, pre-processed proposals are available for download:
+
+```bash
+th download/download_proposals.lua
+```
 
 ### Dataset
 
@@ -119,13 +125,45 @@ To download and extract the relevant data, please run the following scripts: `th
 
 ## Train and test a model using the example code
 
+This repository contains scripts for training and testing a pedestrian detector network using a pre-trained network on ImageNet for feature extraction such as the alexnet or vgg.
+
+> Note: several options are available for configuring the training/testing parameters (see `options.lua` for a complete set of available parameters).
+
+
 ### Training a network
+
+To train a model run `th train.lua`. To change the default settings, use the input arguments of your choice. To see all available option's parameters do `th train.lua --help` or check `options.lua`.
+
+* You can select one of the following imagenet pre-trained networks for feature extraction: AlexNet, ZeilerNet, VGG (16, 19), ResNet (19, 34, 50, 101, 152, 200), and GoogleNet v3.
+
+* Snapshots of the network's training procedure are stored to disk other information such as the configuration file, loss logs and model parameters of the training procedure (default path is `./data/exp`). You can change this directory by passing the `-expDir`new path to save the experiment option.
+
 
 ### Testing a network (mAP accuracy)
 
-### Detecting persons
+To test a network's accuracy, run `th test.lua` and define the `-expID`, `-dataset` and `-expDir` input options (if changed) to compute the mean average-precision.
+
+> Note: The test script only uses a single GPU.
+
+
+### Demo: detecting persons
+
+To run the basic demo code you'll first need to train a network model. After this is done, just simply run the demo on the terminal:
+
+```lua
+qlua demo.lua -expID '<exp_name>'
+```
+
+This selects random images from the testing set and it should give you a glimpse of how the net performs.
+
 
 ### Benchmark evaluation
+
+This repo contains scripts for benchmarking the results of your network against other top-performing methods on the Caltech dataset. This requires that evaluation results of other algorithms have been downloaded in order to run.
+
+After this is setup, simply run `th benchmark.lua -expID '<exp_name>` and this will generate a series of plots which are stored in the experiment's folder in `./data/`.
+
+The default name for the method is `OURS`. To change to any other name just set a different name using `-eval_plot_name` input option.
 
 
 ## License
