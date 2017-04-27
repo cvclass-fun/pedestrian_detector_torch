@@ -1,5 +1,5 @@
 --[[
-    Process rois for a dataset.
+    Load rois for a dataset.
 ]]
 
 
