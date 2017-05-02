@@ -1,13 +1,13 @@
 function script_process_rois_tudbrussels(data_dir, save_dir, alg_name)
 %% process ROI boxes for the tudbrussels dataset
 
-fprintf('\n************************************************************')
+fprintf('\n*****************************************************************')
 fprintf('\n**** Start Tud-Brussels %s roi detection/extraction script. ****', upper(alg_name))
-fprintf('\n************************************************************')
+fprintf('\n*****************************************************************')
 
 %% inits
 dataset_name = 'tudbrussels';
-skip_step = [30,3,1];   % skip image step
+skip_step = [1];   % skip image step
 cascThr = -1;           % acf opts
 cascCal = [0.025, 0.1]; % acf opts
 

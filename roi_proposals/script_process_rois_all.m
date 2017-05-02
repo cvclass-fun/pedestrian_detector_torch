@@ -3,12 +3,12 @@ function script_process_rois_all(data_dir, save_dir)
 algs = {'acf', 'ldcf', 'edgeboxes'};
 
 %% Process rois
-for i=1:1:size(algs,1)
+for i=1:1:size(algs,2)
     algorithm = algs{i};
-    
+
     %% caltech
     script_process_rois_caltech(data_dir, save_dir, algorithm);
-    
+
     %% inria
     script_process_rois_inria(data_dir, save_dir, algorithm);
 

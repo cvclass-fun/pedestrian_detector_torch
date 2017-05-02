@@ -8,7 +8,7 @@ fprintf('\n************************************************************')
 %% inits
 dataset_name = 'caltech';
 skip_step = [30,3,1];   % skip image step
-cascThr = -1;           % acf opts
+cascThr = [-1];           % acf opts
 cascCal = [0.025, 0.1]; % acf opts
 
 path_train = {fullfile(data_dir, 'extracted_data', 'set00/');
@@ -30,12 +30,14 @@ path_test  = {fullfile(data_dir, 'extracted_data', 'set06/');
 switch alg_name
     case 'acf'
         for istep=1:1:size(skip_step, 2)
+        for ithresh=1:1:size(cascThr, 2)
         for ical=1:1:size(cascCal,2)
             fprintf('\n %s roi proposals settings: step=%d, threshold=%d, calibration=%0.3f', ...
-                    alg_name, skip_step(istep), cascThr, cascCal(ical))
+                    alg_name, skip_step(istep), cascThr(ithresh), cascCal(ical))
 
             process_rois(alg_name, dataset_name, 'train', path_train, save_dir, skip_step(istep), cascThr, cascCal(ical));
-            process_rois(alg_name, dataset_name, 'test', path_test, save_dir, skip_step(istep), cascThr, cascCal(ical));
+            process_rois(alg_name, dataset_name, 'test', path_test, save_dir, skip_step(istep), cascThr(ithresh), cascCal(ical));
+        end
         end
         end
     case 'ldcf'

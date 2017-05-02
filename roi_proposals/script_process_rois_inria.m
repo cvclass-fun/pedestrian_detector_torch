@@ -1,9 +1,9 @@
 function script_process_rois_inria(data_dir, save_dir, alg_name)
 %% process ROI boxes for the inria dataset
 
-fprintf('\n************************************************************')
+fprintf('\n**********************************************************')
 fprintf('\n**** Start INRIA %s roi detection/extraction script. ****', upper(alg_name))
-fprintf('\n************************************************************')
+fprintf('\n**********************************************************')
 
 %% inits
 dataset_name = 'inria';
