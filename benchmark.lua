@@ -27,6 +27,9 @@ local opt = opts.parse(arg)
 
 print('==> (2/6) Load dataset data loader')
 local data_loader = paths.dofile('data.lua')
+if string.match(opt.dataset, 'caltech') then
+    opt.dataset = 'caltech'
+end
 local data_gen = data_loader(opt.dataset, 'test')
 local data, data_dir = data_gen()
 

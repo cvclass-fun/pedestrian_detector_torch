@@ -27,11 +27,11 @@ local function get_data_dir(name)
     local dbloader
     local str = string.lower(name)
     if str == 'caltech' then
-        dbloader = dbc.load{name='caltech_pedestrian', task='detection'}
+        dbloader = dbc.load{name='caltech_pedestrian', task='detection_d'}
     elseif str == 'caltech_10x' then
-        dbloader = dbc.load{name='caltech_pedestrian', task='detection_10x'}
+        dbloader = dbc.load{name='caltech_pedestrian', task='detection_10x_d'}
     elseif str == 'caltech_30x' then
-        dbloader = dbc.load{name='caltech_pedestrian', task='detection_30x'}
+        dbloader = dbc.load{name='caltech_pedestrian', task='detection_30x_d'}
     elseif str == 'eth' then
         error('eth dataset not yet defined.')
     elseif str == 'inria' then
@@ -64,12 +64,14 @@ local function get_command(name, data_dir, save_dir, alg_name)
             train = { skip_step = 3, threshold = 1, calibration = 0.1 },
             test = { skip_step = 3, threshold = 1, calibration = 0.025 }
         }
+        name = 'caltech'
     elseif str == 'caltech_30x' then
         dset_fn = 'script_process_rois_caltech'
         alg_opts = {
             train = { skip_step = 1, threshold = 1, calibration = 0.1 },
             test = { skip_step = 1, threshold = 1, calibration = 0.025 }
         }
+        name = 'caltech'
     elseif str == 'eth' then
         error('eth dataset not yet defined.')
         dset_fn = 'script_process_rois_acf_eth'
@@ -136,8 +138,8 @@ end
 
 ------------------------------------------------------------------------------------------------------------
 
+--[[ load all roi boxes of all files into a table ]]
 local function load_rois_files(dset_path, name, mode)
---[[load all roi boxes of all files into a table]]
 
     local rois = {}
 
@@ -152,7 +154,9 @@ local function load_rois_files(dset_path, name, mode)
         rois[k] = {}
         local nfiles = set.nfiles
         for i=1, nfiles do -- cycle all files
-            xlua.progress(i, nfiles)
+            if i%100==0 or i==nfiles then
+                xlua.progress(i, nfiles)
+            end
             local image_filename = set.getFilename(i)
             local tmp_str =  string.split(image_filename, '/')
             local set_name = tmp_str[#tmp_str-3]

@@ -9,11 +9,11 @@ local function get_db_loader(name)
     local dbloader
     local str = string.lower(name)
     if str == 'caltech' then
-        dbloader = dbc.load{name='caltech_pedestrian', task='detection'}
+        dbloader = dbc.load{name='caltech_pedestrian', task='detection_d'}
     elseif str == 'caltech_10x' then
-        dbloader = dbc.load{name='caltech_pedestrian', task='detection_10x'}
+        dbloader = dbc.load{name='caltech_pedestrian', task='detection_10x_d'}
     elseif str == 'caltech_30x' then
-        dbloader = dbc.load{name='caltech_pedestrian', task='detection_30x'}
+        dbloader = dbc.load{name='caltech_pedestrian', task='detection_30x_d'}
     elseif str == 'eth' then
         error('eth dataset not yet defined.')
     elseif str == 'inria' then
