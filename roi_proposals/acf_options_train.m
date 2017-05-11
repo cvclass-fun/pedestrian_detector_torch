@@ -56,7 +56,7 @@ end
 function opts = options_inria()
 %% set up opts for training detector (see acfTrain)
 opts=acfTrain(); opts.modelDs=[100 41]; opts.modelDsPad=[128 64];
-opts.nWeak=[32 128 512 2048]; opts.pJitter=struct('flip',1); 
+opts.nWeak=[32 128 512 2048]; opts.pJitter=struct('flip',1);
 opts.pBoost.pTree.fracFtrs=1/16;
 opts.nWeak=[32 128 512 2048];
 opts.pJitter=struct('flip',1);
@@ -67,7 +67,7 @@ end
 function opts = options_eth()
 %% set up opts for training detector (see acfTrain)
 opts=acfTrain(); opts.modelDs=[100 41]; opts.modelDsPad=[128 64];
-opts.nWeak=[32 128 512 2048]; opts.pJitter=struct('flip',1); 
+opts.nWeak=[32 128 512 2048]; opts.pJitter=struct('flip',1);
 opts.pBoost.pTree.fracFtrs=1/16;
 opts.nWeak=[32 128 512 2048];
 opts.pJitter=struct('flip',1);
@@ -78,7 +78,7 @@ end
 function opts = options_tudbrussels()
 %% set up opts for training detector (see acfTrain)
 opts=acfTrain(); opts.modelDs=[100 41]; opts.modelDsPad=[128 64];
-opts.nWeak=[32 128 512 2048]; opts.pJitter=struct('flip',1); 
+opts.nWeak=[32 128 512 2048]; opts.pJitter=struct('flip',1);
 opts.pBoost.pTree.fracFtrs=1/16;
 opts.nWeak=[32 128 512 2048];
 opts.pJitter=struct('flip',1);

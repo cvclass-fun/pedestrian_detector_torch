@@ -152,8 +152,8 @@ for i=1:1:size(fname, 1)
             bbs = [0,0,0,0,0];
         end
         
-        % convert bbos from [x,y,w,h] to [xmin,ymin,xmax,ymax]
-        boxes = [bbs(:,1), bbs(:,2), bbs(:,1) + bbs(:,3)-1, bbs(:,2) + bbs(:,4)-1];
+        % convert bbos from [x,y,w,h,score] to [xmin,ymin,xmax,ymax,score]
+        boxes = [bbs(:,1), bbs(:,2), bbs(:,1) + bbs(:,3)-1, bbs(:,2) + bbs(:,4)-1, bbs(:,5)];
         
         
         % save boxes to file
