@@ -105,6 +105,12 @@ local function get_command(name, data_dir, save_dir, alg_name)
             train = paths.concat(save_dir, ('%s_edgeboxes_skip=%d'):format(name, alg_opts['train']['skip_step'])),
             test = paths.concat(save_dir, ('%s_edgeboxes_skip=%d'):format(name, alg_opts['test']['skip_step']))
         }
+    elseif str == 'acf_ldcf' then
+        dset_dirname = {
+            train = paths.concat(save_dir, ('%s_acf_skip=%d_thresh=%d_cal=%s'):format(name, alg_opts['train']['skip_step'],
+                        alg_opts['train']['threshold'], alg_opts['train']['calibration'])),
+            test = paths.concat(save_dir, ('%s_ldcf_skip=%d'):format(name, alg_opts['test']['skip_step']))
+        }
     else
         error(('Invalid algorithm: %s. Available algorithms: acf, ldcf or edgeboxes'):format(alg_name))
     end

@@ -49,6 +49,9 @@ local rois = rois_loader(opt.dataset, opt.proposalAlg, 'test')
 
 print('==> (4/6) Load model: ' .. opt.load)
 local model, model_parameters = unpack(torch.load(opt.load))
+if pcall(require, 'cudnn') then
+    cudnn.convert(model, cudnn)
+end
 
 
 --------------------------------------------------------------------------------
