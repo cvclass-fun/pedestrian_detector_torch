@@ -1,0 +1,1 @@
+projectDir = '/home/mf/Toolkits/Codigo/git/pedestrian_detector/'
