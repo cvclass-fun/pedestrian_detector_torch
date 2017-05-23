@@ -7,9 +7,9 @@ The following datasets are available for train/test:
 - [Caltech Pedestrian Dataset](http://www.vision.caltech.edu/Image_Datasets/CaltechPedestrians/)
 
 
-## Installation
+## Requirements
 
-### Requirements
+To run the code in this repository you'll need the following resources:
 
 - [Torch7](http://torch.ch/docs/getting-started.html)
 - [Fast R-CNN module](https://github.com/farrajota/fast-rcnn-torch)
@@ -171,6 +171,6 @@ The default name for the method is `OURS`. To change to any other name just set 
 MIT license (see the LICENSE file)
 
 
-## Acknowledges
+## Acknowledgements
 
 The evaluation/benchmarking code is an adaptation of @pdollar [toolbox](https://github.com/pdollar/toolbox)/[evaluation](http://www.vision.caltech.edu/Image_Datasets/CaltechPedestrians/code/code3.2.1.zip) code.
