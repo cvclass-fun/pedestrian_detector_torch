@@ -198,6 +198,13 @@ local opt = opts.parse(arg)
 
 local save_dir = projectDir .. 'data/proposals'
 
+print('\n*** Generate/cache roi data: ***')
+print('dataset=', opt.dataset)
+print('alg=', opt.proposalAlg)
+print('save_dir=', save_dir)
+print('')
+
+
 local dset_path = process_rois(opt.dataset, opt.proposalAlg, save_dir)
 
 for mode, path in pairs(dset_path) do
