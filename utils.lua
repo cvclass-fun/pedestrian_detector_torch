@@ -5,7 +5,7 @@
 
 require 'xlua'
 require 'image'
-local nms = paths.dofile('/home/mf/Toolkits/Codigo/git/fastrcnn/utils/nms.lua')
+local nms = require 'fastrcnn.utils.nms'
 
 ------------------------------------------------------------------------------------------------------------
 
@@ -26,13 +26,15 @@ end
 
 ------------------------------------------------------------------------------------------------------------
 
-local function filter_detections(scores, boxes, nms_threshold, cl_names)
+local function filter_detections(scores, boxes, nms_threshold, cl_names, rois)
     --local nbest = 50
 
     -- select best scoring boxes without background
     local max_score, idx = scores:max(2)
     local idx_nobg = idx:gt(1)
     max_score = max_score[idx_nobg]
+    local score_rois = rois:select(2,5)
+    score_rois = score_rois[idx_nobg]
     if max_score:numel() == 0 then
         return torch.FloatTensor(), torch.FloatTensor()
     end
@@ -50,7 +52,8 @@ local function filter_detections(scores, boxes, nms_threshold, cl_names)
     -- non-maximum suppression
     local keep = nms.dense(torch.cat(boxes_thresh:float(), max_score:float(),2), nms_threshold)
 
-    return max_score:index(1, keep), boxes_thresh:index(1, keep)
+    --return max_score:index(1, keep), boxes_thresh:index(1, keep)
+    return score_rois:index(1, keep), boxes_thresh:index(1, keep)
 end
 
 ------------------------------------------------------------------------------------------------------------
@@ -72,7 +75,7 @@ local function filter_detections2(scores, boxes, nms_threshold, cl_names)
     boxes = boxes:index(1, idx)
     maxID = maxID:index(1, idx)
     max_score = max_score:index(1, idx)
-    
+
     if idx:numel()==1 then
         return max_score:squeeze(2), boxes
     end
@@ -131,6 +134,27 @@ end
 
 ------------------------------------------------------------------------------------------------------------
 
+local function clean_roi_proposals(proposals)
+    if proposals:numel() > 0 then
+        local keep = {}
+        for i=1, proposals:size(1) do
+            if proposals[i]:sum() > 0 then
+                table.insert(keep, i)
+            end
+        end
+
+        if next(keep) then
+            return proposals:index(1, torch.LongTensor(keep))
+        else
+            return torch.FloatTensor()
+        end
+    else
+        return proposals
+    end
+end
+
+------------------------------------------------------------------------------------------------------------
+
 local function process_detections(data_loader, rois, imdetector, opt)
 
     local plot_name = opt.eval_plot_name
@@ -155,13 +179,16 @@ local function process_detections(data_loader, rois, imdetector, opt)
             local filename = data_loader.test.getFilename(ifile)
             local img = image.load(filename)
             local proposals = rois['test'][ifile]
-            local scores, bboxes = imdetector:detect(img, proposals)
-            -- clamp predictions within image
-            bboxes:select(2,1):clamp(1, img:size(3))
-            bboxes:select(2,2):clamp(1, img:size(2))
-            local detection_scores, detection_boxes = filter_detections(scores, bboxes, nms_thresh, classes)
-            if detection_scores:numel() > 0 then
-                save_boxes_to_file(detection_scores, detection_boxes, filename, save_path) -- save results to .txt
+            local proposals_clean = clean_roi_proposals(proposals)
+            if proposals_clean:numel() > 0 then
+                local scores, bboxes = imdetector:detect(img, proposals_clean[{{},{1,4}}])
+                -- clamp predictions within image
+                bboxes:select(2,1):clamp(1, img:size(3))
+                bboxes:select(2,2):clamp(1, img:size(2))
+                local detection_scores, detection_boxes = filter_detections(scores, bboxes, nms_thresh, classes, proposals_clean)
+                if detection_scores:numel() > 0 then
+                    save_boxes_to_file(detection_scores, detection_boxes, filename, save_path) -- save results to .txt
+                end
             end
         end
         print('> Done.')

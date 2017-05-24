@@ -7,8 +7,6 @@ require 'nn'
 require 'cunn'
 require 'cudnn'
 require 'inn'
---local utils = require 'fastrcnn.utils'
-local utils = paths.dofile('/home/mf/Toolkits/Codigo/git/fastrcnn/utils/init.lua')
 
 ------------------------------------------------------------------------------------------------------------
 
