@@ -2,10 +2,6 @@
 
 This repo contains example code to train/test/benchmark a pedestrian detector using lua/torch7. This detector uses a modified [Fast R-CNN](https://github.com/rbgirshick/fast-rcnn) network + a pedestrian oriented roi proposal generator for detection.
 
-The following datasets are available for train/test:
-
-- [Caltech Pedestrian Dataset](http://www.vision.caltech.edu/Image_Datasets/CaltechPedestrians/)
-
 
 ## Requirements
 
@@ -123,6 +119,13 @@ dbc.load('caltech_pedestrian')
 To download and extract the relevant data, please run the following scripts: `th download_extract_dataset.lua -save_dir <store_dir_path>` and `download_extract_algorithms.lua -save_dir <store_dir_path>`. The `-save_dir <store_dir_path>` allows for the user to save the downloaded data into another directory than the root dir of the code.
 
 
+#### Available datasets
+
+The following datasets are available for training/testing a pedestrian detector using this repo:
+
+- [Caltech Pedestrian Dataset](http://www.vision.caltech.edu/Image_Datasets/CaltechPedestrians/)
+
+
 ## Train and test a model using the example code
 
 This repository contains scripts for training and testing a pedestrian detector network using a pre-trained network on ImageNet for feature extraction such as the alexnet or vgg.
@@ -151,7 +154,7 @@ To test a network's accuracy, run `th test.lua` and define the `-expID`, `-datas
 To run the basic demo code you'll first need to train a network model. After this is done, just simply run the demo on the terminal:
 
 ```lua
-qlua demo.lua -expID '<exp_name>'
+qlua demo.lua -expID <exp_name>
 ```
 
 This selects random images from the testing set and it should give you a glimpse of how the net performs.
