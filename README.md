@@ -66,6 +66,22 @@ cd APIs/lua && luarocks make
 
 ## Data setup
 
+The necessary data is available for download by calling the following command in the terminal:
+
+```bash
+th download/download_all.lua
+```
+
+This will download the following data:
+
+- pre-trained models on Imagenet
+- pre-processed roi proposals on the caltech pedestrian dataset
+- algorithm scores of several methods for benchmark
+
+
+> Note: this data can also be downloaded manually by following the next steps.
+
+
 ### Download pre-trained models and benchmark algorithm results
 
 Several pre-trained models are available to be used in this code. To download all networks, simply run the following command in the terminal:
