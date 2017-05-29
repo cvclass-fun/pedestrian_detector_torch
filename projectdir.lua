@@ -1,1 +1,2 @@
-projectDir = '/home/mf/Toolkits/Codigo/git/pedestrian_detector/'
+-- Project directory
+projectDir = os.getenv('HOME') .. '/pedestrian_detector_torch'
