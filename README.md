@@ -72,7 +72,7 @@ To start using the code, clone the repo into your home directory:
 git clone --recursive https://github.com/farrajota/pedestrian_detector_torch
 ```
 
-If you clone the repo to another dir, please make sure you modify `projectdir.lua` to point to the new path.
+If you clone the repo into a different directory, please make sure you modify `projectdir.lua` and point to the new path before using the code.
 
 ## Data setup
 
