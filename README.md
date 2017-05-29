@@ -2,6 +2,7 @@
 
 This repo contains example code to train/test/benchmark a pedestrian detector using lua/torch7. This detector uses a modified [Fast R-CNN](https://github.com/rbgirshick/fast-rcnn) network + a pedestrian oriented roi proposal generator for detection.
 
+# Installation
 
 ## Requirements
 
@@ -47,7 +48,7 @@ To install the dbcollection package do the following:
 
 - download the git repository to disk.
 ```
-git clone https://github.com/farrajota/dbcollection
+git clone --recursive https://github.com/farrajota/dbcollection
 ```
 
 - install the Python module.
@@ -63,6 +64,15 @@ cd APIs/lua && luarocks make
 > For more information about the dbcollection package see [here](https://github.com/farrajota/dbcollection).
 
 
+# Usage
+
+To start using the code download, the the repo to your home directory:
+
+```
+git clone --recursive https://github.com/farrajota/pedestrian_detector_torch
+```
+
+If you clone the repo to another dir, please make sure you modify `projectdir.lua` to point to the new path.
 
 ## Data setup
 
@@ -185,11 +195,11 @@ After this is setup, simply run `th benchmark.lua -expID '<exp_name>` and this w
 The default name for the method is `OURS`. To change to any other name just set a different name using `-eval_plot_name` input option.
 
 
-## License
+# License
 
 MIT license (see the LICENSE file)
 
 
-## Acknowledgements
+# Acknowledgements
 
 The evaluation/benchmarking code is an adaptation of @pdollar [toolbox](https://github.com/pdollar/toolbox)/[evaluation](http://www.vision.caltech.edu/Image_Datasets/CaltechPedestrians/code/code3.2.1.zip) code.
