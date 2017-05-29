@@ -66,7 +66,7 @@ cd APIs/lua && luarocks make
 
 # Usage
 
-To start using the code, clone the repo into your home directory:
+To start using the code, clone this repo to your home directory:
 
 ```
 git clone --recursive https://github.com/farrajota/pedestrian_detector_torch
