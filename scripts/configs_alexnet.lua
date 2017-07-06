@@ -10,6 +10,7 @@ local configs = {
     netType = 'alexnet',
     clsType = '',
     featID = 4,
+    cls_size = 4096,
     clear_buffers = 'true',
 
     -- train options
