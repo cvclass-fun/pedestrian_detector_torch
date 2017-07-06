@@ -17,15 +17,15 @@ configs.expID = 'caltech_10x_vgg16_concat'
 configs.clsType = 'concat'
 configs.eval_plot_name = 'OURS-vgg16-concat'
 
---[[ concatenate options fields to a string ]]-
+--[[ concatenate options fields to a string ]]--
 local str_args = ''
-for k, v in pairs(info) do
+for k, v in pairs(configs) do
     str_args = str_args .. ('-%s %s '):format(k, v)
 end
 
---[[ set cuda GPUs ]]-
+--[[ set cuda GPUs ]]--
 local str_cuda
-if info.nGPU <= 1 then
+if configs.nGPU <= 1 then
     str_cuda = 'CUDA_VISIBLE_DEVICES=1'
 else
     str_cuda = 'CUDA_VISIBLE_DEVICES=1,0'
