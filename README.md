@@ -1,16 +1,34 @@
 # Pedestrian detector for Lua/Torch7
 
-This repo contains example code to train/test/benchmark a pedestrian detector using lua/torch7. This detector uses a modified [Fast R-CNN](https://github.com/rbgirshick/fast-rcnn) network + a pedestrian oriented roi proposal generator for detection.
+Train/test/benchmark a pedestrian detector using lua/torch7. These detector uses a modified [Fast R-CNN](https://github.com/rbgirshick/fast-rcnn) network + a pedestrian oriented roi proposal generator for detection.
 
-# Installation
+The available networks for feature extraction for use are the following:
 
-## Requirements
+- AlexNet
+- ZeilerNet
+- VGG16/19
+- Googlenet (incep v3)
+- ResNet (18, 32, 50, 101, 152, 200)
+
+> Note: Some of these networks require GPUs with 10Gb+ ram to be trained.
+
+For Region-of-Interest (ROI) proposal generation, this code has three methods for roi proposal generation:
+
+- ACF ([paper](https://pdollar.github.io/files/papers/DollarPAMI14pyramids.pdf), [code](https://github.com/pdollar/toolbox))
+- LDCF ([paper](https://pdollar.github.io/files/papers/NamNIPS14ldcf.pdf), [code](https://github.com/pdollar/toolbox))
+- EdgeBoxes ([paper](https://www.microsoft.com/en-us/research/publication/edge-boxes-locating-object-proposals-from-edges/#), [code](https://github.com/pdollar/edges))
+
+
+## Installation
+
+### Requirements
 
 To run the code in this repository you'll need the following resources:
 
 - [Torch7](http://torch.ch/docs/getting-started.html)
 - [Fast R-CNN module](https://github.com/farrajota/fast-rcnn-torch)
 - [dbcollection](https://github.com/farrajota/dbcollection)
+- Python (>=2.7 or >=3.4)
 - Matlab >= 2012a (for benchmark and roi proposal generation)
 
 ### Packages/dependencies installation
@@ -46,25 +64,27 @@ cd fast-rcnn-torch && luarocks make rocks/*
 
 To install the dbcollection package do the following:
 
-- download the git repository to disk.
+- install the dbcollection Python package
+```
+pip install dbcollection
+```
+
+- download the git repository to disk
 ```
 git clone --recursive https://github.com/farrajota/dbcollection
 ```
 
-- install the Python module.
+-  install the Lua package
 ```
-cd dbcollection/ && python setup.py install
-```
-
--  install the Lua package.
-```
-cd APIs/lua && luarocks make
+cd dbcollection/APIs/lua && luarocks make
 ```
 
 > For more information about the dbcollection package see [here](https://github.com/farrajota/dbcollection).
 
 
-# Usage
+# Getting started
+
+## Usage
 
 To start using the code, clone this repo to your home directory:
 
@@ -74,7 +94,7 @@ git clone --recursive https://github.com/farrajota/pedestrian_detector_torch
 
 If you clone the repo into a different directory, please make sure you modify `projectdir.lua` and point to the new path before using the code.
 
-## Data setup
+### Data setup
 
 The necessary data is available for download by calling the following command in the terminal:
 
@@ -125,8 +145,9 @@ This code uses the `dbcollection` package for data setup/management.
 To setup a dataset do the following:
 
 ```lua
-dbc = require 'dbcollection.manager'
-dbc.load{name='caltech_pedestrian', data_dir='path/to/dataset'}
+dbc = require 'dbcollection'
+caltech = dbc.load{name='caltech_pedestrian',
+                   data_dir='save/files/to/dir'}
 ```
 
 This will download and pre-process the dataset's data and store the all files to the selected path. If `data_dir` is not defined or left empty, the data files will be stored in the `dbcollection/` folder in your home directory in a folder with the dataset's name.
@@ -134,12 +155,12 @@ This will download and pre-process the dataset's data and store the all files to
 In case you already have the necessary data files, you can manually set the directory path of the files by doing the following commands:
 
 ```lua
-dbc = require 'dbcollection.manager'
-dbc.add{name='caltech_pedestrian', data_dir='path/to/dataset', task={}, file_path={}}
-dbc.load('caltech_pedestrian')
+dbc = require 'dbcollection'
+caltech = dbc.load{name='caltech_pedestrian',
+                   data_dir='path/to/dataset/files'}
 ```
 
-> Note: All available datasets can be downloaded via `dbcollection`.
+> Note: All datasets used here can be downloaded via `dbcollection`.
 
 
 To download and extract the relevant data, please run the following scripts: `th download_extract_dataset.lua -save_dir <store_dir_path>` and `download_extract_algorithms.lua -save_dir <store_dir_path>`. The `-save_dir <store_dir_path>` allows for the user to save the downloaded data into another directory than the root dir of the code.
@@ -195,11 +216,11 @@ After this is setup, simply run `th benchmark.lua -expID '<exp_name>` and this w
 The default name for the method is `OURS`. To change to any other name just set a different name using `-eval_plot_name` input option.
 
 
-# License
+## License
 
 MIT license (see the LICENSE file)
 
 
-# Acknowledgements
+## Acknowledgements
 
 The evaluation/benchmarking code is an adaptation of @pdollar [toolbox](https://github.com/pdollar/toolbox)/[evaluation](http://www.vision.caltech.edu/Image_Datasets/CaltechPedestrians/code/code3.2.1.zip) code.
