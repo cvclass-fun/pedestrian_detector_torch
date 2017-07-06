@@ -147,6 +147,7 @@ local function features_setup_4(roi_pool_size, cls_size)
                 :add(nn.ConcatTable()
                     :add(nn.Identity())
                     :add(features_net3))))
+        :add(nn.FlattenTable())
 
     -- classifier parameters (needed to config the classifier network with the correct parameters)
     local classifier_params = {
