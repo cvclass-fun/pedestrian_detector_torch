@@ -71,12 +71,25 @@ end
 local function features_setup_2(name, roi_pool_size, cls_size)
     local features, model_parameters = CreateModel(name)
 
+    local layers
+    if name == 'vgg16' then
+        layers = {
+            {1, 19},
+            {20, 21}
+        }
+    else
+        layers = {
+            {1, 25},
+            {26, 27}
+        }
+    end
+
     local features_net1 = nn.Sequential()
-    for i = 1, 19 do
+    for i = layers[1][1], layers[1][2] do
         features_net1:add(features:get(i))
     end
     local features_net2 = nn.Sequential()
-    for i = 20, 21 do
+    for i = layers[2][1], layers[2][2] do
         features_net2:add(features:get(i))
     end
 
@@ -108,12 +121,25 @@ end
 local function features_setup_3(name, roi_pool_size, cls_size)
     local features, model_parameters = CreateModel(name)
 
+    local layers
+    if name == 'vgg16' then
+        layers = {
+            {1, 17},
+            {28, 21}
+        }
+    else
+        layers = {
+            {1, 23},
+            {24, 27}
+        }
+    end
+
     local features_net1 = nn.Sequential()
-    for i = 1, 17 do
+    for i = layers[1][1], layers[1][2] do
         features_net1:add(features:get(i))
     end
     local features_net2 = nn.Sequential()
-    for i = 18, 21 do
+    for i = layers[2][1], layers[2][2] do
         features_net2:add(features:get(i))
     end
 
@@ -145,12 +171,25 @@ end
 local function features_setup_4(name, roi_pool_size, cls_size)
     local features, model_parameters = CreateModel(name)
 
+    local layers
+    if name == 'vgg16' then
+        layers = {
+            {1, 14},
+            {15, 21}
+        }
+    else
+        layers = {
+            {1, 18},
+            {19, 27}
+        }
+    end
+
     local features_net1 = nn.Sequential()
-    for i = 1, 14 do
+    for i = layers[1][1], layers[1][2] do
         features_net1:add(features:get(i))
     end
     local features_net2 = nn.Sequential()
-    for i = 15, 21 do
+    for i = layers[2][1], layers[2][2] do
         features_net2:add(features:get(i))
     end
 
@@ -182,12 +221,25 @@ end
 local function features_setup_5(name, roi_pool_size, cls_size)
     local features, model_parameters = CreateModel(name)
 
+    local layers
+    if name == 'vgg16' then
+        layers = {
+            {1, 12},
+            {13, 21}
+        }
+    else
+        layers = {
+            {1, 16},
+            {17, 27}
+        }
+    end
+
     local features_net1 = nn.Sequential()
-    for i = 1, 12 do
+    for i = layers[1][1], layers[1][2] do
         features_net1:add(features:get(i))
     end
     local features_net2 = nn.Sequential()
-    for i = 13, 21 do
+    for i = layers[2][1], layers[2][2] do
         features_net2:add(features:get(i))
     end
 
@@ -219,12 +271,25 @@ end
 local function features_setup_6(name, roi_pool_size, cls_size)
     local features, model_parameters = CreateModel(name)
 
+    local layers
+    if name == 'vgg16' then
+        layers = {
+            {1, 10},
+            {11, 21}
+        }
+    else
+        layers = {
+            {1, 14},
+            {15, 27}
+        }
+    end
+
     local features_net1 = nn.Sequential()
-    for i = 1, 10 do
+    for i = layers[1][1], layers[1][2] do
         features_net1:add(features:get(i))
     end
     local features_net2 = nn.Sequential()
-    for i = 11, 21 do
+    for i = layers[2][1], layers[2][2] do
         features_net2:add(features:get(i))
     end
 
@@ -256,16 +321,31 @@ end
 local function features_setup_7(name, roi_pool_size, cls_size)
     local features, model_parameters = CreateModel(name)
 
+    local layers
+    if name == 'vgg16' then
+        layers = {
+            {1,  14},
+            {15, 19},
+            {20, 21}
+        }
+    else
+        layers = {
+            {1,  18},
+            {19, 25},
+            {26, 27}
+        }
+    end
+
     local features_net1 = nn.Sequential()
-    for i = 1, 14 do
+    for i = layers[1][1], layers[1][2] do
         features_net1:add(features:get(i))
     end
     local features_net2 = nn.Sequential()
-    for i = 15, 19 do
+    for i = layers[2][1], layers[2][2] do
         features_net2:add(features:get(i))
     end
     local features_net3 = nn.Sequential()
-    for i = 20, 21 do
+    for i = layers[3][1], layers[3][2] do
         features_net3:add(features:get(i))
     end
 
@@ -278,6 +358,7 @@ local function features_setup_7(name, roi_pool_size, cls_size)
                 :add(nn.ConcatTable()
                     :add(nn.Identity())
                     :add(features_net3))))
+        :add(nn.FlattenTable())
 
     -- classifier parameters (needed to config the classifier network with the correct parameters)
     local classifier_params = {

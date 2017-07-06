@@ -5,7 +5,7 @@ local fastrcnn = require 'fastrcnn'
 torch.setdefaulttensortype('torch.FloatTensor')
 paths.dofile('../projectdir.lua')
 
-local models = {'vgg16'}
+local models = {'vgg16', 'vgg19'}
 local max_feat_id = 7
 
 local sample_img = torch.CudaTensor(1,3,600,600):uniform()
@@ -14,7 +14,7 @@ local sample_proposals = torch.CudaTensor({{1,1,1,100,100}, {1,100,100,200,200}}
 for _, model_id in pairs(models) do
     for _, clsType in pairs({'concat','parallel'}) do
         print('\n=======================================================')
-        print(('Testing %s with the classifier type: %s'):format(model_id, clsType))
+        print(('Testing **%s** with the classifier type: %s'):format(model_id, clsType))
         print('=======================================================\n')
 
         for i=1, max_feat_id do
