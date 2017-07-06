@@ -76,4 +76,4 @@ print('Input options: ' .. str_args)
 os.execute(('%s th train.lua %s'):format(str_cuda, str_args))
 
 -- benchmark network
-os.execute('CUDA_VISIBLE_DEVICES=0 th benchmark.lua ' .. str_args)
+os.execute(('%s th benchmark.lua '):format(str_cuda,str_args))
