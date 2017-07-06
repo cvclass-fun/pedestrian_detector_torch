@@ -55,6 +55,11 @@ local function select_model(model_name, architecture_type, features_id, roi_pool
     assert(nGPU)
     assert(nClasses)
 
+    local str = string.lower(architecture_type)
+    if str == 'simple' then
+        features_id = 1
+    end
+
     -- setup feature network
     local featureNet, model_params, classifier_params = setup_feature_network(model_name, features_id, roi_pool_size, cls_size)
 
