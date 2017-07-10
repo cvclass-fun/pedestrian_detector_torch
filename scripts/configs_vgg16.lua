@@ -22,6 +22,7 @@ local configs = {
     testInter = 'false',
     snapshot = 10,
     nGPU = 2,
+    grad_clip = 5,
 
     -- FRCNN options
     frcnn_scales = 600,
