@@ -9,11 +9,11 @@ local function get_db_loader(name)
     local dbloader
     local str = string.lower(name)
     if str == 'caltech' then
-        dbloader = dbc.load{name='caltech_pedestrian', task='detection_d'}
+        dbloader = dbc.load{name='caltech_pedestrian', task='detection'}
     elseif str == 'caltech_10x' then
-        dbloader = dbc.load{name='caltech_pedestrian', task='detection_10x_d'}
+        dbloader = dbc.load{name='caltech_pedestrian', task='detection_10x'}
     elseif str == 'caltech_30x' then
-        dbloader = dbc.load{name='caltech_pedestrian', task='detection_30x_d'}
+        dbloader = dbc.load{name='caltech_pedestrian', task='detection_30x'}
     elseif str == 'eth' then
         error('eth dataset not yet defined.')
     elseif str == 'inria' then
@@ -64,7 +64,7 @@ local function fetch_data_set(name, set_name)
             local objID = dbloader:object(set_name, id + 1):squeeze()
             local bbox = dbloader:get(set_name, 'boxes', objID[3]):squeeze()
             local label = objID[2]
-            if label == 1 or label == 2 then -- (1 - 'person' | 2 - 'person-fa'')
+            if label == 1 or label == 2 then  -- (1 - 'person' | 2 - 'person-fa'')
                 table.insert(gt_boxes, bbox:totable())
                 table.insert(gt_classes, 1)
             end
@@ -84,7 +84,7 @@ local function fetch_data_set(name, set_name)
 
     -- classes
     local class_names = ascii2str(dbloader:get(set_name, 'classes', 1))
-    loader.classLabel = class_names -- fetch the first two classes
+    loader.classLabel = class_names  -- fetch the first two classes
 
     return loader
 end
