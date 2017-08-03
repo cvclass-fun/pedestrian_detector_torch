@@ -49,7 +49,7 @@ local function fetch_data_set(name, set_name)
 
     -- get image file path
     loader.getFilename = function(idx)
-        local filename = ascii2str(dbloader:get(set_name, 'image_filenames', idx))[1]
+        local filename = ascii2str(dbloader:get(set_name, 'image_filenames', idx))
         return paths.concat(dbloader.data_dir, filename)
     end
 
