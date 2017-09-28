@@ -2,12 +2,14 @@
 
 Train/test/benchmark a pedestrian detector using lua/torch7. These detector uses a modified [Fast R-CNN](https://github.com/rbgirshick/fast-rcnn) network + a pedestrian oriented roi proposal generator for detection.
 
+<p align="center"><img src="img/arch.png" alt="Network architecture" height="100%" width="100%"></p>
+
 The available networks for feature extraction for use are the following:
 
 - AlexNet
 - ZeilerNet
 - VGG16/19
-- Googlenet (incep v3)
+- Googlenet (inception v3)
 - ResNet (18, 32, 50, 101, 152, 200)
 
 > Note: Some of these networks require GPUs with 10Gb+ ram to be trained.
@@ -28,7 +30,7 @@ To run the code in this repository you'll need the following resources:
 - [Torch7](http://torch.ch/docs/getting-started.html)
 - [Fast R-CNN module](https://github.com/farrajota/fast-rcnn-torch)
 - [dbcollection](https://github.com/farrajota/dbcollection)
-- Python (>=2.7 or >=3.4)
+- Python (>=2.7 or >=3.5)
 - Matlab >= 2012a (for benchmark and roi proposal generation)
 
 ### Packages/dependencies installation
@@ -64,23 +66,26 @@ cd fast-rcnn-torch && luarocks make rocks/*
 
 To install the dbcollection package do the following:
 
-- install the dbcollection Python package
-```
-pip install dbcollection
-```
+- install the Python module (Python>=2.7 and >=3.5).
 
-- download the git repository to disk
-```
-git clone --recursive https://github.com/farrajota/dbcollection
-```
+    ```
+    pip install dbcollection
+    ```
 
--  install the Lua package
-```
-cd dbcollection/APIs/lua && luarocks make
-```
+- install the Lua/Torch7 dbcollection wrapper:
 
-> For more information about the dbcollection package see [here](https://github.com/farrajota/dbcollection).
+    1. download the Lua/Torch7 git repo to disk.
 
+    ```
+    git clone https://github.com/dbcollection/dbcollection-torch7
+    ```
+
+    2. install the package.
+    ```
+    cd dbcollection-torch7 && luarocks make
+    ```
+
+> For more information about the dbcollection package see [here](https://github.com/dbcollection/dbcollection-torch7).
 
 # Getting started
 
@@ -218,7 +223,7 @@ The default name for the method is `OURS`. To change to any other name just set 
 
 ## License
 
-MIT license (see the LICENSE file)
+MIT license (see the [LICENSE](LICENSE.md) file)
 
 
 ## Acknowledgements
